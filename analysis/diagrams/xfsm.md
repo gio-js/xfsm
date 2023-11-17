@@ -1,12 +1,15 @@
 ```mermaid
 ---
-title: XFSM main classes
+title: XFSM classes diagram
 ---
 classDiagram
-    note "xfsm base classes\n"
+    XfsmManager <.. Xfsm
+    XfsmDatabaseProvider <.. XfsmManager
+    XfsmDatabaseConnection <.. XfsmDatabaseProvider
+
     note for XfsmManager "The Xfsm manager is used to initialize\n the data structure and the items processor"
     class XfsmManager~TKey~{ 
-        +XfsmManager(initialState: IState, endingState: IState)
+        +XfsmManager(initialState: IState, endingState: IState, databaseProvider: XfsmDatabaseProvider)
         +AddEndingState(endingState: IState)
         +EnsureInitialized~TKey~()
         +RetrieveDDLScript()
@@ -34,11 +37,6 @@ classDiagram
         +Xsfm(manager:  XfsmManager~TKey~)
         +WaitAndProcessElements(maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan)
         +ExecuteRolling()
-    }
-
-    class XfsmElementProcessor{
-        <<interface>>
-        +ProcessElement(Context context)
     }
 
 ```

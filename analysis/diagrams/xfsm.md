@@ -4,6 +4,8 @@ title: XFSM classes diagram
 ---
 classDiagram
     XfsmManager <.. Xfsm
+    StatusContext <.. IState
+    IState <.. XfsmManager
     XfsmDatabaseProvider <.. XfsmManager
     XfsmDatabaseConnection <.. XfsmDatabaseProvider
 
@@ -37,6 +39,25 @@ classDiagram
         +Xsfm(manager:  XfsmManager~TKey~)
         +WaitAndProcessElements(maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan)
         +ExecuteRolling()
+    }
+
+
+    note "State design pattern"
+    class IState{
+        <<interface>>
+        +execute()
+        +getContext() : StatusContext
+    }
+    class StatusContext{
+        -state: IState
+        +StateContext(initialState: IState)
+        +changeState(state: IState)
+    }
+    IState <|-- ConcreteStates
+    class ConcreteStates {
+        -StatusContext statusContext
+        +setStatusContext(statusContext: StatusContext)
+        +execute()
     }
 
 ```

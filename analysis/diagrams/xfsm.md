@@ -8,15 +8,23 @@ classDiagram
     IState <.. XfsmManager
     XfsmDatabaseProvider <.. XfsmManager
     XfsmDatabaseConnection <.. XfsmDatabaseProvider
+    XfsmFetchMode <.. XfsmManager
 
     note for XfsmManager "The Xfsm manager is used to initialize\n the data structure and the items processor"
     class XfsmManager~TKey~{ 
-        +XfsmManager(initialState: IState, endingState: IState, databaseProvider: XfsmDatabaseProvider)
+        +XfsmManager(initialState: IState, endingState: IState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
         +AddEndingState(endingState: IState)
         +EnsureInitialized~TKey~()
         +RetrieveDDLScript()
+        +getFetchMode() : XfsmFetchMode
         +~T~Fetch() : TKey
         +~T~AddElement(key: TKey)
+    }
+
+    class XfsmFetchMode {
+       <<enumeration>>
+       Queue,
+       Stack
     }
 
     note for XfsmDatabaseProvider "The Xfsm database provider is able\nto 'talk' with every supported database systems"

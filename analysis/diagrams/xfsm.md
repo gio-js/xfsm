@@ -3,28 +3,35 @@
 title: XFSM classes diagram
 ---
 classDiagram
-    XfsmManager <.. Xfsm
-    StatusContext <.. IState
-    IState <.. XfsmManager
-    XfsmDatabaseProvider <.. XfsmManager
+    Xfsm <.. XfsmProcessor
+    StatusContext <.. IXfsmState
+    IXfsmState <.. Xfsm
+    IXfsmState <.. XfsmElement
+    XfsmFetchMode <.. Xfsm
+    XfsmDatabaseProvider <.. Xfsm
     XfsmDatabaseConnection <.. XfsmDatabaseProvider
-    XfsmFetchMode <.. XfsmManager
 
-    note for XfsmManager "The Xfsm manager is used to initialize\n the data structure and the items processor"
-    class XfsmManager~TKey~{ 
-        +XfsmManager(initialState: IState, endingState: IState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
-        +AddEndingState(endingState: IState)
-        +EnsureInitialized~TKey~()
+    note for Xfsm "The Xfsm is used to initialize\n the data structure and the items processor"
+    class Xfsm{ 
+        +Xfsm(initialState: IXfsmState, endingState: IXfsmState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
+        +AddEndState(endState: IXfsmState)
+        +EnsureInitialized()
         +RetrieveDDLScript()
         +getFetchMode() : XfsmFetchMode
-        +~T~Fetch() : TKey
-        +~T~AddElement(key: TKey)
+        +Fetch() : XfsmElement
+        +AddElement(key: XfsmElement)
     }
 
     class XfsmFetchMode {
        <<enumeration>>
        Queue,
        Stack
+    }
+
+    note for XfsmElement "XfsmElement represents a single specific element of the items collections"
+    class XfsmElement~TKey~ {
+        GetState() : IXfsmState
+        GetBusinessElement(): TKey
     }
 
     note for XfsmDatabaseProvider "The Xfsm database provider is able\nto 'talk' with every supported database systems"
@@ -43,29 +50,28 @@ classDiagram
         +Dispose()
     }
 
-    class Xfsm~TKey~{
-        +Xsfm(manager:  XfsmManager~TKey~)
+    class XfsmProcessor{
+        +XfsmProcessor(xfsmInstance:  Xfsm)
         +WaitAndProcessElements(maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan)
         +ExecuteRolling()
     }
 
-
     note "State design pattern"
-    class IState{
+    class IXfsmState{
         <<interface>>
-        +execute()
-        +getContext() : StatusContext
+        +Execute()
+        +GetContext() : StatusContext
     }
     class StatusContext{
-        -state: IState
-        +StateContext(initialState: IState)
-        +changeState(state: IState)
+        -state: IXfsmState
+        +StateContext(initialState: IXfsmState)
+        +ChangeState(state: IXfsmState)
     }
-    IState <|-- ConcreteStates
+    IXfsmState <|-- ConcreteStates
     class ConcreteStates {
         -StatusContext statusContext
-        +setStatusContext(statusContext: StatusContext)
-        +execute()
+        +SetStatusContext(statusContext: StatusContext)
+        +Execute()
     }
 
 ```

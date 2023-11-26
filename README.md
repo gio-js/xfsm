@@ -5,10 +5,12 @@
   * if efficient, an integration with a distributed memory cache like redis
   * porting on at least 2 main prog. languages (c#, java)
   * excellent error handling
-  * states definitions up to the developer who's using this lib
   * states transitions will be defined by the business logic (at runtime) during the item elaboration
   * provide a web statistics dashboard (ie: tot. number of elements, amount of elements based on current status, last errors, ecc...)
   * provide a rest api interface which provides the same statistics as above and add some interationcs features (ie. add new elements, retrieve a specific element, etc.)
+## What's up to the developer who's using this lib
+  * states definitions: has to implements the required IState concrete business logic
+  * states transitions: into the business logic, when required, has to use the lib api in order to move the item in the next status
 ## Library "must have"
   * fsm: generic finite state machine library processor; will "move" the item state from A to B (with proper error handling)
   * consistency and durability: every state transtions will be stored in a relational database

@@ -8,6 +8,8 @@
   * states transitions will be defined by the business logic (at runtime) during the item elaboration
   * provide a web statistics dashboard (ie: tot. number of elements, amount of elements based on current status, last errors, ecc...)
   * provide a rest api interface which provides the same statistics as above and add some interationcs features (ie. add new elements, retrieve a specific element, etc.)
+## Restrictions
+  * Collection items must be of the same complex type
 ## What's up to the developer who's using this lib
   * states definitions: has to implements the required IState concrete business logic
   * states transitions: into the business logic, when required, has to use the lib api in order to move the item in the next status
@@ -31,3 +33,13 @@
       1. analize data arrived from the sensor and take the right action (turn on the alarm, send an sms, etc...)
       1. archive event data for auditing purpose
       1. update some statistics based on event type
+## When this lib can be of any help?
+  * When you don't have any chance to rely on some other well known products/technlogies (ie. RabbitMq, Kafka, ecc..)
+  * When you simply can't move your business logic on any other technlogy rather than your RDBMS.
+  * When you simply don't want to introduce new elements in your architecture to undestand/manage/monitor/etc...
+  * When you basically have a strong know how on your RDBM in your team and you're confindend on this for the moment.
+  * Maybe you just undesrstood there's the necessity to decouple your services/business logic and moving over using this lib can be a little step required than introducing some other components
+  
+## Disclaimer
+This is not intended to be a sobstitute of any other queing or competing consumers technlogies.
+Is just a case study hoping that can be of any help someday, somehow to someone :)

@@ -12,7 +12,7 @@
   * states definitions: has to implements the required IState concrete business logic
   * states transitions: into the business logic, when required, has to use the lib api in order to move the item in the next status
 ## Library "must have"
-  * fsm: generic finite state machine library processor; will "move" the item state from A to B (with proper error handling)
+  * fsm: generic finite state machine library processor features; will "move" the item state from A to B (with proper error handling)
   * consistency and durability: every state transtions will be stored in a relational database
   * concurrency: the library will garantee thread safety among elaboration sessions
   * competing consumer: in a distributed architecture with multi process/thread condition, will guarantee that a specific item X will be processed by a single consumer at a time

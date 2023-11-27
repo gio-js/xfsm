@@ -4,12 +4,13 @@ title: XFSM classes diagram
 ---
 classDiagram
     Xfsm <.. XfsmProcessor
-    StatusContext <.. IXfsmState
+    StateContext <.. IXfsmState
     IXfsmState <.. Xfsm
     IXfsmState <.. XfsmElement
     XfsmFetchMode <.. Xfsm
     XfsmDatabaseProvider <.. Xfsm
     XfsmDatabaseConnection <.. XfsmDatabaseProvider
+    XfsmElement <.. XfsmElementFactory
 
     note for Xfsm "The Xfsm is used to initialize\n the data structure and the items processor"
     class Xfsm{ 
@@ -18,7 +19,7 @@ classDiagram
         +EnsureInitialized()
         +RetrieveDDLScript()
         +getFetchMode() : XfsmFetchMode
-        +Fetch() : XfsmElement
+        +Fetch(state: IXfsmState) : XfsmElement
         +AddElement(key: XfsmElement)
     }
 
@@ -30,8 +31,11 @@ classDiagram
 
     note for XfsmElement "XfsmElement represents a single specific element of the items collections"
     class XfsmElement~TKey~ {
-        GetState() : IXfsmState
-        GetBusinessElement(): TKey
+        +GetInsertedTimestamp(): Timestamp
+        +GetLastUpdateTimestamp(): Timestamp
+        +GetFetchTimestamp(): Timestamp
+        +GetState() : IXfsmState
+        +GetBusinessElement(): TKey
     }
 
     note for XfsmDatabaseProvider "The Xfsm database provider is able\nto 'talk' with every supported database systems"
@@ -59,19 +63,19 @@ classDiagram
     note "State design pattern"
     class IXfsmState{
         <<interface>>
-        +Execute()
-        +GetContext() : StatusContext
+        +Execute() : void
+        +GetStateUniqueIndex(): Integer
+        +GetContext() : StateContext
     }
-    class StatusContext{
-        -state: IXfsmState
+
+    class StateContext{
+        -currentState: IXfsmState
         +StateContext(initialState: IXfsmState)
         +ChangeState(state: IXfsmState)
     }
-    IXfsmState <|-- ConcreteStates
-    class ConcreteStates {
-        -StatusContext statusContext
-        +SetStatusContext(statusContext: StatusContext)
-        +Execute()
+
+    class XfsmElementFactory {
+        +Create~TKey~(state: IXfsmState, businessElement: TKey): XfsmElement
     }
 
 ```

@@ -4,9 +4,9 @@ title: XFSM classes diagram
 ---
 classDiagram
     Xfsm <.. XfsmProcessor
-    StateContext <.. IXfsmState
     IXfsmState <.. Xfsm
     IXfsmState <.. XfsmElement
+    IXfsmState <.. XfsmStateContext
     XfsmFetchMode <.. Xfsm
     XfsmDatabaseProvider <.. Xfsm
     XfsmDatabaseConnection <.. XfsmDatabaseProvider
@@ -65,13 +65,14 @@ classDiagram
         <<interface>>
         +Execute() : void
         +GetStateUniqueIndex(): Integer
-        +GetContext() : StateContext
     }
 
-    class StateContext{
+    class XfsmStateContext{
+        <<abstract>>
         -currentState: IXfsmState
         +StateContext(initialState: IXfsmState)
-        +ChangeState(state: IXfsmState)
+        +TransitionTo(state: IXfsmState)
+        +Execute()
     }
 
     class XfsmElementFactory {

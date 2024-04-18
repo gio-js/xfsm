@@ -31,6 +31,7 @@ classDiagram
 
     note for XfsmElement "XfsmElement represents a single specific element of the items collections"
     class XfsmElement~TKey~ {
+        <<interface>>
         +GetInsertedTimestamp(): Timestamp
         +GetLastUpdateTimestamp(): Timestamp
         +GetFetchTimestamp(): Timestamp

@@ -13,7 +13,8 @@ classDiagram
     XfsmElement <.. XfsmElementFactory
 
     note for Xfsm "The Xfsm is used to initialize\n the data structure and the items processor"
-    class Xfsm{ 
+    class Xfsm{
+        <<abstract>>
         +Xfsm(initialState: IXfsmState, endingState: IXfsmState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
         +AddEndState(endState: IXfsmState)
         +EnsureInitialized()
@@ -56,6 +57,7 @@ classDiagram
     }
 
     class XfsmProcessor{
+        <<abstract>>
         +XfsmProcessor(xfsmInstance:  Xfsm)
         +WaitAndProcessElements(maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan)
         +ExecuteRolling()
@@ -77,6 +79,7 @@ classDiagram
     }
 
     class XfsmElementFactory {
+        <<interface>>
         +Create~TKey~(state: IXfsmState, businessElement: TKey): XfsmElement
     }
 

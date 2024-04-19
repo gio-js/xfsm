@@ -7,7 +7,7 @@ namespace Xfsm.Core.Base
     /// <summary>
     /// Abstract implementation of an Xfsm
     /// </summary>
-    public abstract class Xfsm
+    public abstract class Xfsm<T>
     {
         private readonly IXfsmState initialState;
         private readonly IList<IXfsmState> endingStates;
@@ -37,5 +37,18 @@ namespace Xfsm.Core.Base
         {
             this.endingStates.Add(endingState);
         }
+
+        public abstract void EnsureInitialized();
+
+        public abstract string RetrieveDDLScript();
+
+        public XfsmFetchMode GetFetchMode()
+        {
+            return this.fetchMode;
+        }
+
+        public abstract IXfsmElement<T> Fetch(IXfsmState fetchState);
+
+        public abstract void AddElement(T businessElement, IXfsmState elementState);
     }
 }

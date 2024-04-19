@@ -13,7 +13,7 @@ classDiagram
     XfsmElement <.. XfsmElementFactory
 
     note for Xfsm "The Xfsm is used to initialize\n the data structure and the items processor"
-    class Xfsm{
+    class Xfsm~TKey~ {
         <<abstract>>
         +Xfsm(initialState: IXfsmState, endingState: IXfsmState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
         +AddEndState(endState: IXfsmState)
@@ -21,7 +21,7 @@ classDiagram
         +RetrieveDDLScript()
         +getFetchMode() : XfsmFetchMode
         +Fetch(state: IXfsmState) : XfsmElement
-        +AddElement(key: XfsmElement)
+        +AddElement(businessElement: TKey, elementState: IXfsmState)
     }
 
     class XfsmFetchMode {

@@ -4,23 +4,24 @@ title: XFSM classes diagram
 ---
 classDiagram
     Xfsm <.. XfsmProcessor
-    StateContext <.. IXfsmState
     IXfsmState <.. Xfsm
     IXfsmState <.. XfsmElement
+    IXfsmState <.. XfsmStateContext
     XfsmFetchMode <.. Xfsm
     XfsmDatabaseProvider <.. Xfsm
     XfsmDatabaseConnection <.. XfsmDatabaseProvider
     XfsmElement <.. XfsmElementFactory
 
     note for Xfsm "The Xfsm is used to initialize\n the data structure and the items processor"
-    class Xfsm{ 
+    class Xfsm~TKey~ {
+        <<abstract>>
         +Xfsm(initialState: IXfsmState, endingState: IXfsmState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
         +AddEndState(endState: IXfsmState)
         +EnsureInitialized()
         +RetrieveDDLScript()
         +getFetchMode() : XfsmFetchMode
         +Fetch(state: IXfsmState) : XfsmElement
-        +AddElement(key: XfsmElement)
+        +AddElement(businessElement: TKey, elementState: IXfsmState)
     }
 
     class XfsmFetchMode {
@@ -31,6 +32,7 @@ classDiagram
 
     note for XfsmElement "XfsmElement represents a single specific element of the items collections"
     class XfsmElement~TKey~ {
+        <<interface>>
         +GetInsertedTimestamp(): Timestamp
         +GetLastUpdateTimestamp(): Timestamp
         +GetFetchTimestamp(): Timestamp
@@ -55,6 +57,7 @@ classDiagram
     }
 
     class XfsmProcessor{
+        <<abstract>>
         +XfsmProcessor(xfsmInstance:  Xfsm)
         +WaitAndProcessElements(maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan)
         +ExecuteRolling()
@@ -65,16 +68,18 @@ classDiagram
         <<interface>>
         +Execute() : void
         +GetStateUniqueIndex(): Integer
-        +GetContext() : StateContext
     }
 
-    class StateContext{
+    class XfsmStateContext{
+        <<abstract>>
         -currentState: IXfsmState
         +StateContext(initialState: IXfsmState)
-        +ChangeState(state: IXfsmState)
+        +TransitionTo(state: IXfsmState)
+        +Execute()
     }
 
     class XfsmElementFactory {
+        <<interface>>
         +Create~TKey~(state: IXfsmState, businessElement: TKey): XfsmElement
     }
 

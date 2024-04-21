@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xfsm.Core", "Xfsm.Core\Xfsm.Core.csproj", "{899F2030-CA2E-47D2-98E3-5EDDD6965B0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.Core", "Xfsm.Core\Xfsm.Core.csproj", "{899F2030-CA2E-47D2-98E3-5EDDD6965B0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xfsm.Test", "Xfsm.Test\Xfsm.Test.csproj", "{EC8A46FC-55CD-4E11-8298-93D9F319AEF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{899F2030-CA2E-47D2-98E3-5EDDD6965B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{899F2030-CA2E-47D2-98E3-5EDDD6965B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{899F2030-CA2E-47D2-98E3-5EDDD6965B0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC8A46FC-55CD-4E11-8298-93D9F319AEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC8A46FC-55CD-4E11-8298-93D9F319AEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC8A46FC-55CD-4E11-8298-93D9F319AEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC8A46FC-55CD-4E11-8298-93D9F319AEF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

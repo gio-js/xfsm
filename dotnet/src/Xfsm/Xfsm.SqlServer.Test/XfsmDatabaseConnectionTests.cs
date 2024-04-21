@@ -21,7 +21,7 @@ namespace Xfsm.SqlServer.Test
         public void Execute_SimpleGetDate_ReturnsServerDate()
         {
             // ARRANGE
-            string connectionString = "Data Source=localhost,5434;User=sa;Password=Pass@word;TrustServerCertificate=true";
+            string connectionString = "Data Source=127.0.0.1,1433;User=sa;Password=Pass@word;TrustServerCertificate=true";
             IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(connectionString);
 
             // ACT

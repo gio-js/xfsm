@@ -8,7 +8,7 @@ jobs:
     name: Run test suite
     runs-on: ubuntu-latest
     env:
-      COMPOSE_FILE: ../../xfsm/dotnet/src/Xfsm/Xfsm.Test/docker-compose.yml
+      COMPOSE_FILE: ./dotnet/src/Xfsm/Xfsm.Test/docker-compose.yml
       #DOCKER_USER: ${{ secrets.DOCKER_USER }}
       #DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
 

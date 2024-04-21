@@ -13,7 +13,7 @@ namespace Xfsm.Core.Interfaces
         /// Executes a sql statement against the acquired sql connection
         /// </summary>
         /// <param name="sqlStatement"></param>
-        void Execute(string sqlStatement);
+        T Execute<T>(string sqlStatement);
 
         /// <summary>
         /// Commit the internal transaction

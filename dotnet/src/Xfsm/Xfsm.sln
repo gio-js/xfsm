@@ -5,9 +5,9 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.Core", "Xfsm.Core\Xfsm.Core.csproj", "{899F2030-CA2E-47D2-98E3-5EDDD6965B0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xfsm.SqlServer", "Xfsm.SqlServer\Xfsm.SqlServer.csproj", "{DA7194B2-EA88-4DF9-89FA-DE042C0278AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.SqlServer", "Xfsm.SqlServer\Xfsm.SqlServer.csproj", "{DA7194B2-EA88-4DF9-89FA-DE042C0278AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xfsm.SqlServer.Test", "Xfsm.SqlServer.Test\Xfsm.SqlServer.Test.csproj", "{C3BDE0EE-548E-4294-B593-22FAB62F28CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.SqlServer.Test", "Xfsm.SqlServer.Test\Xfsm.SqlServer.Test.csproj", "{C3BDE0EE-548E-4294-B593-22FAB62F28CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

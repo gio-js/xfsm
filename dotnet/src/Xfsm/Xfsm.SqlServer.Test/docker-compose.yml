@@ -1,6 +1,7 @@
 version: '3.4'
 
 services:
+
   sqldata:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
@@ -12,7 +13,8 @@ services:
     image: mcr.microsoft.com/dotnet/sdk:8.0
     volumes:
       - ../../Xfsm:/src
-      #- ../Xfsm.SqlServer.Test:/test
+    environment:
+      ConnectionStrings__TestConnectionString: "Data Source=sqldata,1433;User=sa;Password=Pass@word;TrustServerCertificate=true;"
     command: [
         "dotnet", "test", "src/Xfsm.SqlServer.Test/Xfsm.SqlServer.Test.csproj"
     ]

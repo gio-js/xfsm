@@ -1,6 +1,4 @@
-﻿using Xfsm.Core.Base;
-
-namespace Xfsm.Core.Interfaces
+﻿namespace Xfsm.Core.Interfaces
 {
     /// <summary>
     /// Represents the element state
@@ -17,11 +15,5 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         /// <returns></returns>
         int GetStateUniqueIndex();
-
-        /// <summary>
-        /// The current state context
-        /// </summary>
-        /// <returns></returns>
-        XfsmStateContext GetContext();
     }
 }

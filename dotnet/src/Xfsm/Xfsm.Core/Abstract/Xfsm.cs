@@ -2,7 +2,7 @@
 using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
 
-namespace Xfsm.Core.Base
+namespace Xfsm.Core.Abstract
 {
     /// <summary>
     /// Abstract implementation of an Xfsm
@@ -11,7 +11,7 @@ namespace Xfsm.Core.Base
     {
         private readonly IXfsmState initialState;
         private readonly IList<IXfsmState> endingStates;
-        private readonly IXfsmDatabaseProvider databaseProvider;
+        private readonly XfsmDatabaseProvider databaseProvider;
         private readonly XfsmFetchMode fetchMode;
 
         /// <summary>
@@ -21,10 +21,10 @@ namespace Xfsm.Core.Base
         /// <param name="endingState"></param>
         /// <param name="databaseProvider"></param>
         /// <param name="fetchMode"></param>
-        public Xfsm(IXfsmState initialState, IXfsmState endingState, IXfsmDatabaseProvider databaseProvider, XfsmFetchMode fetchMode)
+        public Xfsm(IXfsmState initialState, IXfsmState endingState, XfsmDatabaseProvider databaseProvider, XfsmFetchMode fetchMode)
         {
             this.initialState = initialState;
-            this.endingStates = new List<IXfsmState>() { endingState };
+            endingStates = new List<IXfsmState>() { endingState };
             this.databaseProvider = databaseProvider;
             this.fetchMode = fetchMode;
         }
@@ -35,7 +35,7 @@ namespace Xfsm.Core.Base
         /// <param name="endingState"></param>
         public void AddEndingState(IXfsmState endingState)
         {
-            this.endingStates.Add(endingState);
+            endingStates.Add(endingState);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Xfsm.Core.Base
         /// <returns></returns>
         public XfsmFetchMode GetFetchMode()
         {
-            return this.fetchMode;
+            return fetchMode;
         }
 
         /// <summary>

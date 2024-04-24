@@ -10,10 +10,16 @@ namespace Xfsm.Core.Interfaces
     public interface IXfsmDatabaseConnection : IDisposable
     {
         /// <summary>
+        /// Executes a sql query against the acquired sql connection
+        /// </summary>
+        /// <param name="sqlQuery"></param>
+        T Query<T>(string sqlQuery);
+
+        /// <summary>
         /// Executes a sql statement against the acquired sql connection
         /// </summary>
         /// <param name="sqlStatement"></param>
-        T Execute<T>(string sqlStatement);
+        void Execute(string sqlStatement);
 
         /// <summary>
         /// Commit the internal transaction

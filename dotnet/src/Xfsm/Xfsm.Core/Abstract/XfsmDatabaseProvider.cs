@@ -8,7 +8,7 @@ namespace Xfsm.Core.Abstract
     /// </summary>
     public abstract class XfsmDatabaseProvider
     {
-        private readonly string connectionString;
+        protected readonly string connectionString;
         public XfsmDatabaseProvider(string connectionString)
         {
             this.connectionString = connectionString;

@@ -21,7 +21,7 @@ namespace Xfsm.SqlServer.Test
         }
 
         [Test]
-        public void Execute_SimpleGetDate_ReturnsServerDate()
+        public void OpenConnection_CreatesXfsmDatabaseConnection()
         {
             // ARRANGE
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);

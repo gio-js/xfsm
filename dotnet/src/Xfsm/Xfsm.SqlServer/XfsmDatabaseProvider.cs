@@ -8,6 +8,10 @@ namespace Xfsm.SqlServer
     /// </summary>
     public class XfsmDatabaseProvider : Xfsm.Core.Abstract.XfsmDatabaseProvider
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="connectionString"></param>
         public XfsmDatabaseProvider(string connectionString) : base(connectionString) { }
 
         /// <summary>
@@ -15,7 +19,7 @@ namespace Xfsm.SqlServer
         /// </summary>
         public override IXfsmDatabaseConnection OpenConnection()
         {
-            throw new NotImplementedException();
+            return new XfsmDatabaseConnection(base.connectionString);
         }
     }
 }

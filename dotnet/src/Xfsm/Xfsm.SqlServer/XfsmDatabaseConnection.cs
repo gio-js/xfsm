@@ -11,22 +11,42 @@ namespace Xfsm.SqlServer
         private readonly string connectionString;
         private SqlConnection connection;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public XfsmDatabaseConnection(string connectionString)
         {
             this.connectionString = connectionString;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Commit()
         {
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Dispose()
         {
             throw new System.NotImplementedException();
         }
 
-        public T Execute<T>(string sqlStatement)
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Execute(string sqlStatement)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public T Query<T>(string sqlQuery)
         {
             if (this.connection == null)
             {
@@ -36,7 +56,7 @@ namespace Xfsm.SqlServer
 
             using (SqlCommand command = connection.CreateCommand())
             {
-                command.CommandText = sqlStatement;
+                command.CommandText = sqlQuery;
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     reader.Read();

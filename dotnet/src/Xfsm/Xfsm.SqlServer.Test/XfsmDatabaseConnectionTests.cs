@@ -21,13 +21,13 @@ namespace Xfsm.SqlServer.Test
         }
 
         [Test]
-        public void Execute_SimpleGetDate_ReturnsServerDate()
+        public void Query_SimpleGetDate_ReturnsServerDate()
         {
             // ARRANGE
             IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
-            DateTime serverDate = connection.Execute<DateTime>("select convert(datetime, '2023-09-11T09:08:11.000');");
+            DateTime serverDate = connection.Query<DateTime>("select convert(datetime, '2023-09-11T09:08:11.000');");
 
             // ASSERT
             Assert.That(serverDate, Is.EqualTo("2023-09-11T09:08:11.000".ToDateTime()));

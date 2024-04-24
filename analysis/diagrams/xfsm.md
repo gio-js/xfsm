@@ -33,11 +33,11 @@ classDiagram
     note for IXfsmElement "XfsmElement represents a single specific element of the items collections"
     class IXfsmElement~TKey~ {
         <<interface>>
+        +GetState() IXfsmState
+        +GetBusinessElement() TKey
         +GetInsertedTimestamp() Timestamp
         +GetLastUpdateTimestamp() Timestamp
         +GetFetchTimestamp() Timestamp
-        +GetState() IXfsmState
-        +GetBusinessElement() TKey
     }
 
     note for XfsmDatabaseProvider "The Xfsm database provider is able\nto 'talk' with every supported database systems"
@@ -59,7 +59,7 @@ classDiagram
     class XfsmProcessor {
         <<abstract>>
         +XfsmProcessor(xfsmInstance:  Xfsm)
-        +WaitAndProcessElements(maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan) void
+        +WaitAndProcessElements(state: IXfsmState, maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan) void
         +ExecuteRolling() void
     }
 
@@ -72,7 +72,7 @@ classDiagram
 
     class IXfsmElementFactory {
         <<interface>>
-        +Create~TKey~(state: IXfsmState, businessElement: TKey) IXfsmElement
+        +Create~TKey~(state: IXfsmState, businessElement: TKey,insertedTimestamp: Timestamp,lastUpdateTimestamp: Timestamp,fetchTimestamp: Timestamp) IXfsmElement
     }
 
 ```

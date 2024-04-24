@@ -56,9 +56,9 @@ classDiagram
         +Dispose() void
     }
 
-    class XfsmProcessor {
+    class XfsmProcessor~TKey~ {
         <<abstract>>
-        +XfsmProcessor(xfsmInstance:  Xfsm)
+        +XfsmProcessor(xfsmInstance:  Xfsm~TKey~)
         +WaitAndProcessElements(state: IXfsmState, maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan) void
         +ExecuteRolling() void
     }

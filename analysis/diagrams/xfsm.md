@@ -18,7 +18,7 @@ classDiagram
         +Xfsm(initialState: IXfsmState, endingState: IXfsmState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
         +AddEndState(endState: IXfsmState) void
         +EnsureInitialized() void
-        +RetrieveDDLScript() void
+        +RetrieveDDLScript() string
         +getFetchMode() XfsmFetchMode
         +Fetch(state: IXfsmState) XfsmElement
         +AddElement(businessElement: TKey, elementState: IXfsmState) void

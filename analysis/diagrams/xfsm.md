@@ -20,7 +20,7 @@ classDiagram
         +EnsureInitialized() void
         +RetrieveDDLScript() string
         +getFetchMode() XfsmFetchMode
-        +Fetch(state: IXfsmState) XfsmElement
+        +Fetch ~TKey~(state: IXfsmState) XfsmElement
         +AddElement(businessElement: TKey, elementState: IXfsmState) void
     }
 

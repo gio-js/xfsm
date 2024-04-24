@@ -3,24 +3,25 @@
 title: XFSM classes diagram
 ---
 classDiagram
-    Xfsm <.. XfsmProcessor
-    IXfsmState <.. Xfsm
-    IXfsmState <.. XfsmElement
-    XfsmFetchMode <.. Xfsm
-    XfsmDatabaseProvider <.. Xfsm
-    XfsmDatabaseConnection <.. XfsmDatabaseProvider
-    XfsmElement <.. XfsmElementFactory
+    Xfsm <.. XfsmProcessor : Dependency
+    IXfsmState <.. IXfsmElement : Association
+    XfsmFetchMode <.. Xfsm : Dependency
+    XfsmDatabaseProvider <.. Xfsm : Dependency
+    IXfsmState <.. Xfsm : Dependency
+    IXfsmDatabaseConnection <|.. XfsmDatabaseProvider : Realization
+    IXfsmElement <|.. IXfsmElementFactory : Realization
+    IXfsmState <.. IXfsmElementFactory : Dependency
 
     note for Xfsm "The Xfsm is used to initialize\n the data structure and the items processor"
     class Xfsm~TKey~ {
         <<abstract>>
         +Xfsm(initialState: IXfsmState, endingState: IXfsmState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
-        +AddEndState(endState: IXfsmState)
-        +EnsureInitialized()
-        +RetrieveDDLScript()
-        +getFetchMode() : XfsmFetchMode
-        +Fetch(state: IXfsmState) : XfsmElement
-        +AddElement(businessElement: TKey, elementState: IXfsmState)
+        +AddEndState(endState: IXfsmState) void
+        +EnsureInitialized() void
+        +RetrieveDDLScript() void
+        +getFetchMode() XfsmFetchMode
+        +Fetch(state: IXfsmState) XfsmElement
+        +AddElement(businessElement: TKey, elementState: IXfsmState) void
     }
 
     class XfsmFetchMode {
@@ -29,49 +30,49 @@ classDiagram
        Stack
     }
 
-    note for XfsmElement "XfsmElement represents a single specific element of the items collections"
-    class XfsmElement~TKey~ {
+    note for IXfsmElement "XfsmElement represents a single specific element of the items collections"
+    class IXfsmElement~TKey~ {
         <<interface>>
-        +GetInsertedTimestamp(): Timestamp
-        +GetLastUpdateTimestamp(): Timestamp
-        +GetFetchTimestamp(): Timestamp
-        +GetState() : IXfsmState
-        +GetBusinessElement(): TKey
+        +GetInsertedTimestamp() Timestamp
+        +GetLastUpdateTimestamp() Timestamp
+        +GetFetchTimestamp() Timestamp
+        +GetState() IXfsmState
+        +GetBusinessElement() TKey
     }
 
     note for XfsmDatabaseProvider "The Xfsm database provider is able\nto 'talk' with every supported database systems"
     class XfsmDatabaseProvider{
-        <<interface>>
+        <<abstract>>
         +XfsmDatabaseProvider(connectionString: string)
-        +OpenConnection()
+        +OpenConnection() IXfsmDatabaseConnection
     }
 
-    note for XfsmDatabaseConnection "The Xfsm database connection manage\n the low level communication with the database systems"
-    class XfsmDatabaseConnection{
+    note for IXfsmDatabaseConnection "The Xfsm database connection manage\n the low level communication with the database systems"
+    class IXfsmDatabaseConnection{
         <<interface>>
-        +XfsmDatabaseConnection()
-        +Execute(sqlStatement: String)
-        +Commit()
-        +Dispose()
+        +Query~TKey~(sqlQuery: String) ~TKey~
+        +Execute(sqlStatement: String) void
+        +Commit() void
+        +Dispose() void
     }
 
-    class XfsmProcessor{
+    class XfsmProcessor {
         <<abstract>>
         +XfsmProcessor(xfsmInstance:  Xfsm)
-        +WaitAndProcessElements(maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan)
-        +ExecuteRolling()
+        +WaitAndProcessElements(maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan) void
+        +ExecuteRolling() void
     }
 
-    note "State design pattern"
+    note for IXfsmState "Represents a specific state of the FSM (the interface which the user has to implement)"
     class IXfsmState{
         <<interface>>
-        +Execute() : void
-        +GetStateUniqueIndex(): Integer
+        +Execute() void
+        +GetStateUniqueIndex() Integer
     }
 
-    class XfsmElementFactory {
+    class IXfsmElementFactory {
         <<interface>>
-        +Create~TKey~(state: IXfsmState, businessElement: TKey): XfsmElement
+        +Create~TKey~(state: IXfsmState, businessElement: TKey) IXfsmElement
     }
 
 ```

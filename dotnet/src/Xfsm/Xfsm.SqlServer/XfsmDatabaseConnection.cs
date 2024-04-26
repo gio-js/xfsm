@@ -14,6 +14,7 @@ namespace Xfsm.SqlServer
     {
         private readonly string connectionString;
         private SqlConnection connection;
+        private SqlTransaction transaction;
 
         /// <summary>
         /// <inheritdoc/>
@@ -28,7 +29,12 @@ namespace Xfsm.SqlServer
         /// </summary>
         public void Commit()
         {
-            throw new System.NotImplementedException();
+            if (this.transaction == null)
+            {
+                throw new Exception("No transaction available.");
+            }
+
+            this.transaction.Commit();
         }
 
         /// <summary>
@@ -36,7 +42,13 @@ namespace Xfsm.SqlServer
         /// </summary>
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            if (this.connection != null)
+            {
+                this.transaction.Dispose();
+                this.transaction = null;
+                this.connection.Dispose();
+                this.connection = null;
+            }
         }
 
         /// <summary>
@@ -44,7 +56,12 @@ namespace Xfsm.SqlServer
         /// </summary>
         public void Execute(string sqlStatement)
         {
-            throw new System.NotImplementedException();
+            this.InitConnectionWithTransactionIfNeeded();
+
+            using SqlCommand command = connection.CreateCommand();
+            command.Transaction = this.transaction;
+            command.CommandText = sqlStatement;
+            command.ExecuteNonQuery();
         }
 
         private string[] exPrimitiveTypes = new string[] { "DateTime", "String" };
@@ -55,45 +72,60 @@ namespace Xfsm.SqlServer
         /// </summary>
         public IList<T> Query<T>(string sqlQuery)
         {
-            if (this.connection == null)
+            this.InitConnectionWithTransactionIfNeeded();
+
+            Type generic = typeof(T); // retrieve the generic T type involved in query
+
+            using SqlCommand command = connection.CreateCommand();
+            command.Transaction = this.transaction;
+            command.CommandText = sqlQuery;
+
+            using SqlDataReader reader = command.ExecuteReader();
+            if (generic.IsPrimitive || exPrimitiveTypes.Contains(generic.Name))
             {
-                this.connection = new SqlConnection(connectionString);
-                this.connection.Open();
+                reader.Read();
+                return new List<T> { (T)reader.GetValue(0) };
             }
-
-            Type generic = typeof(T);
-
-            using (SqlCommand command = connection.CreateCommand())
+            else
             {
-                command.CommandText = sqlQuery;
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (generic.IsPrimitive || exPrimitiveTypes.Contains(generic.Name))
-                    {
-                        reader.Read();
-                        return new List<T> { (T)reader.GetValue(0) };
-                    }
-                    else
-                    {
-                        IList<T> elements = new List<T>();
-                        PropertyInfo[] elementProperties = GetElementProperties(generic);
+                IList<T> elements = new List<T>();
+                PropertyInfo[] elementProperties = GetElementProperties(generic);
 
-                        while (reader.Read())
-                        {
-                            T element = (T)Activator.CreateInstance(generic);
-                            for (int i = 0; i < elementProperties.Length; i++)
-                            {
-                                PropertyInfo propertyInfo = elementProperties[i];
-                                propertyInfo.SetValue(element, reader.GetValue(i));
-                            }
-                            elements.Add(element);
-                        }
-                        return elements;
+                while (reader.Read())
+                {
+                    T element = (T)Activator.CreateInstance(generic);
+                    for (int i = 0; i < elementProperties.Length; i++)
+                    {
+                        PropertyInfo propertyInfo = elementProperties[i];
+                        propertyInfo.SetValue(element, reader.GetValue(i));
                     }
+                    elements.Add(element);
                 }
+                return elements;
             }
         }
 
+        /// <summary>
+        /// Build a connection with explicit declared transaction if null
+        /// </summary>
+        private void InitConnectionWithTransactionIfNeeded()
+        {
+            if (this.connection == null)
+            {
+                // create connection
+                this.connection = new SqlConnection(this.connectionString);
+                this.connection.Open();
+
+                // starts a new transaction
+                this.transaction = this.connection.BeginTransaction();
+            }
+        }
+
+        /// <summary>
+        /// Simple retrieve of object prorperties by reflection
+        /// </summary>
+        /// <param name="generic"></param>
+        /// <returns></returns>
         private PropertyInfo[] GetElementProperties(Type generic)
         {
             if (!typesPropertiesCache.ContainsKey(generic))

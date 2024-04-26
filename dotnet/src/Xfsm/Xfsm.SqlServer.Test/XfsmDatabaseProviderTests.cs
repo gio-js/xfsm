@@ -27,7 +27,7 @@ namespace Xfsm.SqlServer.Test
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
 
             // ACT
-            IXfsmDatabaseConnection connection = provider.OpenConnection();
+            IXfsmDatabaseConnection connection = provider.GetConnection();
 
             // ASSERT
             Assert.That(connection, Is.Not.Null);

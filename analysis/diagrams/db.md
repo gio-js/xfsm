@@ -3,19 +3,19 @@
 title: Bag elements datamodel
 ---
 erDiagram
-    BAG_ELEMENT ||--|| BUSINESS_ELEMENT : has
-    BAG_ELEMENT {
-        long Id PK
-        datetimeoffset insertedTimestamp
-        datetimeoffset lastUpdatedTimestamp
-        datetimeoffset fetchedTimestamp
-        int uniqueIndexState
-        short fetchStatus "todo, progress, done, error"
-        string error
+    XfsmElement ||--|| XfsmBusinessElement : has
+    XfsmElement {
+        Id long PK
+        InsertedTimestamp datetimeoffset
+        LastUpdatedTimestamp datetimeoffset
+        FetchedTimestamp datetimeoffset
+        UniqueIndexState int
+        FetchStatus short "todo, progress, done, error"
+        Error string
     }
-    BUSINESS_ELEMENT {
-        long Id PK
-        long BagElementId FK
-        string Json
+    XfsmBusinessElement {
+        Id long PK
+        XfsmElementId long FK
+        JsonData string
     }
 ```

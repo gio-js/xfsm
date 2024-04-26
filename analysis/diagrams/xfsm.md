@@ -44,7 +44,7 @@ classDiagram
     class XfsmDatabaseProvider{
         <<abstract>>
         +XfsmDatabaseProvider(connectionString: string)
-        +OpenConnection() IXfsmDatabaseConnection
+        +GetConnection() IXfsmDatabaseConnection
     }
 
     note for IXfsmDatabaseConnection "The Xfsm database connection manage\n the low level communication with the database systems"

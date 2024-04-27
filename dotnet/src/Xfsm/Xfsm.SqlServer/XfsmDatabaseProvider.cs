@@ -1,5 +1,4 @@
-﻿using System;
-using Xfsm.Core.Interfaces;
+﻿using Xfsm.Core.Interfaces;
 
 namespace Xfsm.SqlServer
 {

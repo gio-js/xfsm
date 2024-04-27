@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
+using Xfsm.SqlServer.Internal;
 
 namespace Xfsm.SqlServer
 {

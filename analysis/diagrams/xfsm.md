@@ -3,25 +3,26 @@
 title: XFSM classes diagram
 ---
 classDiagram
-    Xfsm <.. XfsmProcessor : Dependency
+    XfsmBagManager <.. XfsmProcessor : Dependency
+    XfsmBagManager <.. XfsmAppender : Dependency
+    XfsmBagManager <.. XfsmDataRolling : Dependency
     IXfsmState <.. IXfsmElement : Association
-    XfsmFetchMode <.. Xfsm : Dependency
-    XfsmDatabaseProvider <.. Xfsm : Dependency
-    IXfsmState <.. Xfsm : Dependency
+    XfsmFetchMode <.. XfsmBagManager : Dependency
+    XfsmDatabaseProvider <.. XfsmBagManager : Dependency
+    IXfsmState <.. XfsmBagManager : Dependency
     IXfsmDatabaseConnection <|.. XfsmDatabaseProvider : Realization
     IXfsmElement <|.. IXfsmElementFactory : Realization
     IXfsmState <.. IXfsmElementFactory : Dependency
 
-    note for Xfsm "The Xfsm is used to initialize\n the data structure and the items processor"
-    class Xfsm~TKey~ {
+    note for XfsmBagManager "The XfsmBagManager is used to initialize\n the bag data structure, fetch and add new items"
+    class XfsmBagManager~TKey~ {
         <<abstract>>
-        +Xfsm(initialState: IXfsmState, endingState: IXfsmState, databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
-        +AddEndState(endState: IXfsmState) void
+        +Xfsm(databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
         +EnsureInitialized() void
         +RetrieveDDLScript() string
-        +getFetchMode() XfsmFetchMode
+        +GetFetchMode() XfsmFetchMode
         +Fetch ~TKey~(state: IXfsmState) XfsmElement
-        +AddElement(businessElement: TKey, elementState: IXfsmState) void
+        +Add(businessElement: TKey, elementState: IXfsmState) void
     }
 
     class XfsmFetchMode {
@@ -56,10 +57,21 @@ classDiagram
         +Dispose() void
     }
 
-    class XfsmProcessor~TKey~ {
+    class XfsmProcessor ~TKey~ {
         <<abstract>>
-        +XfsmProcessor(xfsmInstance:  Xfsm~TKey~)
+        +XfsmProcessor(xfsmInstance:  XfsmBagManager~TKey~)
         +WaitAndProcessElements(state: IXfsmState, maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan) void
+    }
+
+    class XfsmAppender ~TKey~ {
+        <<abstract>>
+        +XfsmAppender(xfsmInstance:  XfsmBagManager~TKey~)
+        +Add(businessElement: TKey, elementState: IXfsmState) void
+    }
+
+    class XfsmDataRolling ~TKey~ {
+        <<abstract>>
+        +XfsmDataRolling(xfsmInstance:  XfsmBagManager~TKey~)
         +ExecuteRolling() void
     }
 

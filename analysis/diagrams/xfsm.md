@@ -27,7 +27,7 @@ classDiagram
     %% note for IXfsmDatabaseConnection "The Xfsm database connection manage\n the low level communication with the database systems"
     class IXfsmDatabaseConnection{
         <<interface>>
-        +Query ~TKey~(sqlQuery: String) ~TKey~
+        +Query ~TKey~(sqlQuery: String) List ~TKey~
         +QueryFirst ~TKey~(sqlQuery: String) ~TKey~
         +Execute(sqlStatement: String) void
         +Commit() void

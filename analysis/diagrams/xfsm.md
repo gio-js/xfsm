@@ -3,19 +3,19 @@
 title: XFSM classes diagram
 ---
 classDiagram
-	IXfsmDatabaseConnection <|.. XfsmDatabaseProvider : Realization
+    IXfsmDatabaseConnection <|.. XfsmDatabaseProvider : Realization
     XfsmDatabaseProvider <.. XfsmBag : Dependency
     XfsmFetchMode <.. XfsmBag : Dependency
-	StateEnum <.. XfsmBag : Dependency
+    StateEnum <.. XfsmBag : Dependency
     StateEnum <.. IXfsmElement : Association
     StateEnum <.. IXfsmState : Association
     IXfsmState <|.. IXfsmStateFactory : Realization
     IXfsmElement <.. XfsmStateContext: Dependency
     IXfsmElement <|.. IXfsmElementFactory : Realization
     XfsmStateContext <|.. XfsmStateContextFactory : Realization
-	XfsmBag <.. XfsmProcessor : Dependency
-	XfsmBag <.. XfsmAppender : Dependency
-	XfsmBag <.. XfsmDataRolling : Dependency
+    XfsmBag <.. XfsmProcessor : Dependency
+    XfsmBag <.. XfsmAppender : Dependency
+    XfsmBag <.. XfsmDataRolling : Dependency
 
     %% note for XfsmDatabaseProvider "The Xfsm database provider is able\nto 'talk' with every supported database systems"
     class XfsmDatabaseProvider{
@@ -33,18 +33,18 @@ classDiagram
         +Dispose() void
     }
 
-    %% note for XfsmBag "The XfsmBag is used to initialize\n the bag data structure, fetch and add new items"
+    %% note for XfsmBag "The XfsmBag is used to initialize\n the bag data structure, peek and add new items"
     class XfsmBag ~TKey~ {
         <<abstract>>
-        +XfsmBag ~TKey~(databaseProvider: XfsmDatabaseProvider, xfsmFetchMode: XfsmFetchMode)
+        +XfsmBag ~TKey~(databaseProvider: XfsmDatabaseProvider, xfsmPeekMode: XfsmPeekMode)
         +EnsureInitialized() void
         +RetrieveDDLScript() string
-        +GetFetchMode() XfsmFetchMode
+        +GetPeekMode() XfsmPeekMode
         +Peek ~TKey~(state: StateEnum) XfsmElement
         +Add(businessElement: TKey, elementState: StateEnum) void
     }
 
-    class XfsmFetchMode {
+    class XfsmPeekMode {
        <<enumeration>>
        Queue,
        Stack
@@ -62,7 +62,7 @@ classDiagram
         +GetBusinessElement() TKey
         +GetInsertedTimestamp() Timestamp
         +GetLastUpdateTimestamp() Timestamp
-        +GetFetchTimestamp() Timestamp
+        +GetPeekTimestamp() Timestamp
     }
 
     %% note for IXfsmState "Represents a specific state of the FSM (the interface which the user has to implement)"
@@ -79,17 +79,17 @@ classDiagram
 
     class IXfsmElementFactory {
         <<interface>>
-        +Create~TKey~(state: StateEnum, businessElement: TKey, insertedTimestamp: Timestamp, lastUpdateTimestamp: Timestamp, fetchTimestamp: Timestamp) IXfsmElement
+        +Create~TKey~(state: StateEnum, businessElement: TKey, insertedTimestamp: Timestamp, lastUpdateTimestamp: Timestamp, peekTimestamp: Timestamp) IXfsmElement
     }
-	
-	%% note for XfsmStateContext "Represents a specific state of the FSM (the interface which the user has to implement)"
+    
+    %% note for XfsmStateContext "Represents a specific state of the FSM (the interface which the user has to implement)"
     class XfsmStateContext ~TKey~ {
         <<abstract>>
-		+XfsmStateContext(element: IXfsmElement ~TKey~)
+        +XfsmStateContext(element: IXfsmElement ~TKey~)
         +Execute() void
         +ChangeState(state: StateEnum) void
     }
-	
+    
     class XfsmStateContextFactory {
         <<abstract>>
         +Create ~TKey~(element: IXfsmElement ~TKey~) XfsmStateContext ~TKey~

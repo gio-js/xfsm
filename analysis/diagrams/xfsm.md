@@ -40,7 +40,7 @@ classDiagram
         +EnsureInitialized() void
         +RetrieveDDLScript() string
         +GetFetchMode() XfsmFetchMode
-        +Peek ~TKey~(state: IXfsmState) XfsmElement
+        +Peek ~TKey~(state: StateEnum) XfsmElement
         +Add(businessElement: TKey, elementState: StateEnum) void
     }
 

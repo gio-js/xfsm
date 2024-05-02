@@ -42,7 +42,7 @@ classDiagram
         +RetrieveDDLScript() string
         +GetPeekMode() XfsmPeekMode
         +Peek ~TKey~(state: StateEnum) XfsmElement
-        +Add(businessElement: TKey, elementState: StateEnum) void
+        +Add(businessElement: TKey, elementState: StateEnum) long
     }
 
     class XfsmPeekMode {

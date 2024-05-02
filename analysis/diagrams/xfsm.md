@@ -85,14 +85,14 @@ classDiagram
     %% note for XfsmStateContext "Represents a specific state of the FSM (the interface which the user has to implement)"
     class XfsmStateContext ~TKey~ {
         <<abstract>>
-        +XfsmStateContext(element: IXfsmElement ~TKey~)
+        +XfsmStateContext(databaseProvider: XfsmDatabaseProvider, stateFactory: IXfsmStateFactory, element: IXfsmElement ~TKey~)
         +Execute() void
         +ChangeState(state: StateEnum) void
     }
     
     class XfsmStateContextFactory {
         <<abstract>>
-        +Create ~TKey~(element: IXfsmElement ~TKey~) XfsmStateContext ~TKey~
+        +Create ~TKey~(databaseProvider: XfsmDatabaseProvider, stateFactory: IXfsmStateFactory, element: IXfsmElement ~TKey~) XfsmStateContext ~TKey~
     }
 
     class XfsmProcessor ~TKey~ {

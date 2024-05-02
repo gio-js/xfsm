@@ -98,13 +98,13 @@ classDiagram
     class XfsmProcessor ~TKey~ {
         <<abstract>>
         +XfsmProcessor(bag:  XfsmBag~TKey~)
-        +WaitAndProcessElements(state: IXfsmState, maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan) void
+        +WaitAndProcessElements(state: StateEnum, maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan) void
     }
 
     class XfsmAppender ~TKey~ {
         <<abstract>>
         +XfsmAppender(bag:  XfsmBag~TKey~)
-        +Add(businessElement: TKey, elementState: IXfsmState) void
+        +Add(businessElement: TKey, elementState: StateEnum) void
     }
 
     class XfsmDataRolling ~TKey~ {

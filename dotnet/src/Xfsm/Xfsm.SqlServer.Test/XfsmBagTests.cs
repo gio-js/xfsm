@@ -6,7 +6,7 @@ using Xfsm.SqlServer.Test.Utils;
 
 namespace Xfsm.SqlServer.Test
 {
-    public class XfsmTests : XfsmBaseTests
+    public class XfsmBagTests : XfsmBaseTests
     {
         public class Sample
         {
@@ -19,11 +19,11 @@ namespace Xfsm.SqlServer.Test
             // ARRANGE
             string connectionString = "";
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(connectionString);
-            IXfsmState state = new Mock<IXfsmState>().Object;
-            XfsmFetchMode mode = XfsmFetchMode.Queue;
+            IXfsmState<Sample> state = new Mock<IXfsmState<Sample>>().Object;
+            XfsmPeekMode mode = XfsmPeekMode.Queue;
 
             // ACT
-            Xfsm<Sample> xfsm = new Xfsm<Sample>(state, state, provider, mode);
+            XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
 
             // ASSERT
             Assert.That(provider, Is.Not.Null);
@@ -35,13 +35,11 @@ namespace Xfsm.SqlServer.Test
             // ARRANGE
             string connectionString = "";
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(connectionString);
-            IXfsmState state = new Mock<IXfsmState>().Object;
-            XfsmFetchMode mode = XfsmFetchMode.Queue;
+            IXfsmState<Sample> state = new Mock<IXfsmState<Sample>>().Object;
+            XfsmPeekMode mode = XfsmPeekMode.Queue;
 
             // ACT
-            Assert.Throws<ArgumentNullException>(() => new Xfsm<Sample>(null, state, provider, mode));
-            Assert.Throws<ArgumentNullException>(() => new Xfsm<Sample>(state, null, provider, mode));
-            Assert.Throws<ArgumentNullException>(() => new Xfsm<Sample>(state, state, null, mode));
+            Assert.Throws<ArgumentNullException>(() => new XfsmBag<Sample>(null, mode));
         }
 
         [Test]
@@ -50,9 +48,9 @@ namespace Xfsm.SqlServer.Test
             // ARRANGE
             string connectionString = "";
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(connectionString);
-            IXfsmState state = new Mock<IXfsmState>().Object;
-            XfsmFetchMode mode = XfsmFetchMode.Queue;
-            Xfsm<Sample> xfsm = new Xfsm<Sample>(state, state, provider, mode);
+            IXfsmState<Sample> state = new Mock<IXfsmState<Sample>>().Object;
+            XfsmPeekMode mode = XfsmPeekMode.Queue;
+            XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
             string expectedScript = "Scripts.DataModel.sql".AsResourceString();
 
             // ACT
@@ -68,9 +66,9 @@ namespace Xfsm.SqlServer.Test
             // ARRANGE
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
             IXfsmDatabaseConnection connection = provider.GetConnection();
-            IXfsmState state = new Mock<IXfsmState>().Object;
-            XfsmFetchMode mode = XfsmFetchMode.Queue;
-            Xfsm<Sample> xfsm = new Xfsm<Sample>(state, state, provider, mode);
+            IXfsmState<Sample> state = new Mock<IXfsmState<Sample>>().Object;
+            XfsmPeekMode mode = XfsmPeekMode.Queue;
+            XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
 
             // ACT
             string script = xfsm.RetrieveDDLScript();

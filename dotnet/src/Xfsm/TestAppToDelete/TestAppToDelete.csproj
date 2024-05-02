@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="States\**" />
+    <EmbeddedResource Remove="States\**" />
+    <None Remove="States\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xfsm.Core\Xfsm.Core.csproj" />
+    <ProjectReference Include="..\Xfsm.SqlServer\Xfsm.SqlServer.csproj" />
+  </ItemGroup>
+
+</Project>

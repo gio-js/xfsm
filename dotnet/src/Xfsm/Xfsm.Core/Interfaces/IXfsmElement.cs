@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Xfsm.Core.Interfaces
 {
@@ -9,6 +7,12 @@ namespace Xfsm.Core.Interfaces
     /// </summary>
     public interface IXfsmElement<T>
     {
+        /// <summary>
+        /// The element current state
+        /// </summary>
+        /// <returns></returns>
+        Enum GetState();
+
         /// <summary>
         /// Element inserted in the bag timestamp
         /// </summary>
@@ -25,13 +29,7 @@ namespace Xfsm.Core.Interfaces
         /// Element fetch from bag timestamp
         /// </summary>
         /// <returns></returns>
-        DateTimeOffset GetFetchTimestamp();
-
-        /// <summary>
-        /// The element current state
-        /// </summary>
-        /// <returns></returns>
-        IXfsmState GetState();
+        DateTimeOffset GetPeekTimestamp();
 
         /// <summary>
         /// The business element representation

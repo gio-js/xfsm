@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
 
@@ -7,35 +7,20 @@ namespace Xfsm.Core.Abstract
     /// <summary>
     /// Abstract implementation of an Xfsm
     /// </summary>
-    public abstract class Xfsm<T>
+    public abstract class XfsmBag<T>
     {
-        private readonly IXfsmState initialState;
-        private readonly IList<IXfsmState> endingStates;
         private readonly XfsmDatabaseProvider databaseProvider;
-        private readonly XfsmFetchMode fetchMode;
+        private readonly XfsmPeekMode fetchMode;
 
         /// <summary>
         /// The base xTended Finite State Machine constructor
         /// </summary>
-        /// <param name="initialState"></param>
-        /// <param name="endingState"></param>
         /// <param name="databaseProvider"></param>
         /// <param name="fetchMode"></param>
-        public Xfsm(IXfsmState initialState, IXfsmState endingState, XfsmDatabaseProvider databaseProvider, XfsmFetchMode fetchMode)
+        public XfsmBag(XfsmDatabaseProvider databaseProvider, XfsmPeekMode fetchMode)
         {
-            this.initialState = initialState;
-            endingStates = new List<IXfsmState>() { endingState };
-            this.databaseProvider = databaseProvider;
+            this.databaseProvider = databaseProvider ?? throw new ArgumentNullException(nameof(databaseProvider));
             this.fetchMode = fetchMode;
-        }
-
-        /// <summary>
-        /// Add some other ending state for the xfsm
-        /// </summary>
-        /// <param name="endingState"></param>
-        public void AddEndingState(IXfsmState endingState)
-        {
-            endingStates.Add(endingState);
         }
 
         /// <summary>
@@ -55,7 +40,7 @@ namespace Xfsm.Core.Abstract
         /// Returns the state machine fetching mode (basically a queue or a stack)
         /// </summary>
         /// <returns></returns>
-        public XfsmFetchMode GetFetchMode()
+        public XfsmPeekMode GetFetchMode()
         {
             return fetchMode;
         }
@@ -63,15 +48,15 @@ namespace Xfsm.Core.Abstract
         /// <summary>
         /// Retrieve a single element from the bag (if any) using the fetch mode
         /// </summary>
-        /// <param name="fetchState"></param>
+        /// <param name="state"></param>
         /// <returns></returns>
-        public abstract IXfsmElement<T> Fetch(IXfsmState fetchState);
+        public abstract IXfsmElement<T> Peek(Enum state);
 
         /// <summary>
         /// Add a new element to the bag
         /// </summary>
         /// <param name="businessElement"></param>
         /// <param name="elementState"></param>
-        public abstract void AddElement(T businessElement, IXfsmState elementState);
+        public abstract void AddElement(T businessElement, Enum elementState);
     }
 }

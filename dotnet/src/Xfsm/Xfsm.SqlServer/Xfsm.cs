@@ -3,43 +3,20 @@ using System.IO;
 using System.Reflection;
 using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
-using Xfsm.SqlServer.Internal;
 
 namespace Xfsm.SqlServer
 {
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Xfsm<T> : Core.Abstract.Xfsm<T>
+    public class XfsmBag<T> : Core.Abstract.XfsmBag<T>
     {
-        private readonly IXfsmState initialState;
-        private readonly IXfsmState endingState;
-        private readonly Core.Abstract.XfsmDatabaseProvider databaseProvider;
-        private readonly XfsmFetchMode fetchMode;
+        public XfsmBag(Core.Abstract.XfsmDatabaseProvider databaseProvider, XfsmPeekMode fetchMode) : base(databaseProvider, fetchMode) { }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="initialState"></param>
-        /// <param name="endingState"></param>
-        /// <param name="databaseProvider"></param>
-        /// <param name="fetchMode"></param>
-        public Xfsm(IXfsmState initialState, IXfsmState endingState, Core.Abstract.XfsmDatabaseProvider databaseProvider, XfsmFetchMode fetchMode) : base(initialState, endingState, databaseProvider, fetchMode)
-        {
-            this.initialState = initialState ?? throw new ArgumentNullException(nameof(initialState));
-            this.endingState = endingState ?? throw new ArgumentNullException(nameof(endingState));
-            this.databaseProvider = databaseProvider ?? throw new ArgumentNullException(nameof(databaseProvider));
-            this.fetchMode = fetchMode;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="businessElement"></param>
-        /// <param name="elementState"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        public override void AddElement(T businessElement, IXfsmState elementState)
+        public override void AddElement(T businessElement, Enum elementState)
         {
             throw new NotImplementedException();
         }
@@ -47,7 +24,6 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         public override void EnsureInitialized()
         {
             throw new NotImplementedException();
@@ -56,10 +32,7 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="fetchState"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public override IXfsmElement<T> Fetch(IXfsmState fetchState)
+        public override IXfsmElement<T> Peek(Enum state)
         {
             throw new NotImplementedException();
         }
@@ -67,8 +40,6 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override string RetrieveDDLScript()
         {
             Assembly libAssembly = Assembly.GetAssembly(typeof(XfsmDatabaseProvider));

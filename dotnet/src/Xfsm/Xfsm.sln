@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.SqlServer", "Xfsm.SqlS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.SqlServer.Test", "Xfsm.SqlServer.Test\Xfsm.SqlServer.Test.csproj", "{C3BDE0EE-548E-4294-B593-22FAB62F28CA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAppToDelete", "TestAppToDelete\TestAppToDelete.csproj", "{10F8C688-7640-4B29-951E-F37A0C7F526B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C3BDE0EE-548E-4294-B593-22FAB62F28CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3BDE0EE-548E-4294-B593-22FAB62F28CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3BDE0EE-548E-4294-B593-22FAB62F28CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F8C688-7640-4B29-951E-F37A0C7F526B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10F8C688-7640-4B29-951E-F37A0C7F526B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10F8C688-7640-4B29-951E-F37A0C7F526B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10F8C688-7640-4B29-951E-F37A0C7F526B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

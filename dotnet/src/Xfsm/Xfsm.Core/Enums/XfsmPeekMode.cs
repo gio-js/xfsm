@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Xfsm.Core.Enums
+﻿namespace Xfsm.Core.Enums
 {
     /// <summary>
     /// The xfsm bag can be fetched in following listed modes.
     /// </summary>
-    public enum XfsmFetchMode
+    public enum XfsmPeekMode
     {
         /// <summary>
         /// Classic FIFO

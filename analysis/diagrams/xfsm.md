@@ -28,6 +28,7 @@ classDiagram
     class IXfsmDatabaseConnection{
         <<interface>>
         +Query ~TKey~(sqlQuery: String) ~TKey~
+        +QueryFirst ~TKey~(sqlQuery: String) ~TKey~
         +Execute(sqlStatement: String) void
         +Commit() void
         +Dispose() void

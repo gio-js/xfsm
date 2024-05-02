@@ -5,7 +5,7 @@ title: XFSM classes diagram
 classDiagram
     IXfsmDatabaseConnection <|.. XfsmDatabaseProvider : Realization
     XfsmDatabaseProvider <.. XfsmBag : Dependency
-    XfsmFetchMode <.. XfsmBag : Dependency
+    XfsmPeekMode <.. XfsmBag : Dependency
     StateEnum <.. XfsmBag : Dependency
     StateEnum <.. IXfsmElement : Association
     StateEnum <.. IXfsmState : Association

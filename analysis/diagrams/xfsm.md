@@ -66,9 +66,9 @@ classDiagram
     }
 
     %% note for IXfsmState "Represents a specific state of the FSM (the interface which the user has to implement)"
-    class IXfsmState {
+    class IXfsmState ~TKey~ {
         <<interface>>
-        +Execute() void
+        +Execute(businessElement: TKey) void
         +GetStateEnum() StateEnum
     }
 

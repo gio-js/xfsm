@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Reflection;
 using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
+using Xfsm.SqlServer.Extensions;
+using Xfsm.SqlServer.Internal;
 
 namespace Xfsm.SqlServer
 {
@@ -16,9 +19,26 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override void AddElement(T businessElement, Enum elementState)
+        public override long AddElement(T businessElement, Enum elementState)
         {
-            throw new NotImplementedException();
+            if (businessElement == null)
+                throw new ArgumentNullException(nameof(businessElement));
+
+            string now = DateTimeProvider.Now().ToSql();
+
+            using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();
+            long id = connection.QueryFirst<long>(string.Format(@"
+                INSERT INTO dbo.XfsmElement (InsertedTimestamp, UpdatedTimestamp, PeekTimestamp, [State], PeekStatus, Error)
+                VALUES ('{0}', '{1}', null, {2}, {3}, null); 
+                SELECT SCOPE_IDENTITY();", now, now, Convert.ToInt16(elementState), (byte)XfsmPeekStatus.Todo));
+
+            connection.Execute(string.Format(@"
+                INSERT INTO dbo.XfsmBusinessElement (XfsmElementId, JsonData)
+                VALUES ('{0}', '{1}');", id, JsonConvert.SerializeObject(businessElement))); //todo: transform to  sql parameters
+
+            connection.Commit();
+
+            return id;
         }
 
         /// <summary>

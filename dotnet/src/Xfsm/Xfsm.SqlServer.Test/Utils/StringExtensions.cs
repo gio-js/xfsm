@@ -10,6 +10,11 @@ namespace Xfsm.SqlServer.Test.Utils
             return DateTime.ParseExact(stringifiedDateTime, "yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture);
         }
 
+        public static DateTimeOffset ToDateTimeOffset(this string stringifiedDateTimeOffset)
+        {
+            return DateTimeOffset.ParseExact(stringifiedDateTimeOffset, "yyyy-MM-ddTHH:mm:ss.fffzzz", CultureInfo.InvariantCulture);
+        }
+
         public static string AsResourceString(this string resource)
         {
             Assembly libAssembly = Assembly.GetAssembly(typeof(XfsmDatabaseProvider));

@@ -9,8 +9,8 @@ namespace Xfsm.Core.Abstract
     /// </summary>
     public abstract class XfsmBag<T>
     {
-        private readonly XfsmDatabaseProvider databaseProvider;
-        private readonly XfsmPeekMode fetchMode;
+        protected readonly XfsmDatabaseProvider databaseProvider;
+        protected readonly XfsmPeekMode fetchMode;
 
         /// <summary>
         /// The base xTended Finite State Machine constructor
@@ -57,6 +57,6 @@ namespace Xfsm.Core.Abstract
         /// </summary>
         /// <param name="businessElement"></param>
         /// <param name="elementState"></param>
-        public abstract void AddElement(T businessElement, Enum elementState);
+        public abstract long AddElement(T businessElement, Enum elementState);
     }
 }

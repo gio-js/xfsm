@@ -84,7 +84,7 @@ namespace Xfsm.SqlServer
             if (generic.IsPrimitive || exPrimitiveTypes.Contains(generic.Name))
             {
                 reader.Read();
-                return new List<T> { (T)reader.GetValue(0) };
+                return new List<T> { (T)Convert.ChangeType(reader.GetValue(0), typeof(T)) };
             }
             else
             {
@@ -103,6 +103,19 @@ namespace Xfsm.SqlServer
                 }
                 return elements;
             }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public T QueryFirst<T>(string sqlQuery)
+        {
+            IList<T> elements = this.Query<T>(sqlQuery);
+
+            if (elements.Count > 0)
+                return elements[0];
+
+            return default;
         }
 
         /// <summary>
@@ -133,5 +146,6 @@ namespace Xfsm.SqlServer
 
             return typesPropertiesCache[generic];
         }
+
     }
 }

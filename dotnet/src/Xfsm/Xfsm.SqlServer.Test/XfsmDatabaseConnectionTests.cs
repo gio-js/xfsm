@@ -112,6 +112,34 @@ namespace Xfsm.SqlServer.Test
         }
 
         [Test]
+        public void QueryFirst_GetSimpleDtoArray()
+        {
+            // ARRANGE
+            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+
+            // ACT
+            SimpleDto dto = connection.QueryFirst<SimpleDto>($"select 123 as Column1, 'test1' as Column2 union select 456 as Column1, 'test2' as Column2;");
+
+            // ASSERT
+            Assert.That(dto, Is.Not.Null);
+            Assert.That(dto.Column1, Is.EqualTo(123));
+            Assert.That(dto.Column2, Is.EqualTo("test1"));
+        }
+
+        [Test]
+        public void QueryFirst_EmptyArray_GetSimpleDtoArray()
+        {
+            // ARRANGE
+            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+
+            // ACT
+            SimpleDto dto = connection.QueryFirst<SimpleDto>($"select top 0 null as Column2;");
+
+            // ASSERT
+            Assert.That(dto, Is.Null);
+        }
+
+        [Test]
         public void Execute_RunDDL()
         {
             // ARRANGE

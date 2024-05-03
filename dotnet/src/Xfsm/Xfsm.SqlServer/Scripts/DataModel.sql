@@ -8,9 +8,9 @@ CREATE TABLE XfsmElement (
 	Id BIGINT IDENTITY(1, 1),
 	InsertedTimestamp DATETIMEOFFSET,
 	UpdatedTimestamp DATETIMEOFFSET,
-	FetchedTimestamp DATETIMEOFFSET,
-	UniqueIndexState SMALLINT,
-	FetchStatus TINYINT, -- 0: todo, 1: progress, 2: done, 3: error
+	PeekTimestamp DATETIMEOFFSET NULL,
+	[State] SMALLINT,
+	PeekStatus TINYINT, -- 0: todo, 1: progress, 2: done, 3: error
 	Error VARCHAR(256) NULL,
 	CONSTRAINT PK_XfsmElement PRIMARY KEY CLUSTERED (Id)
 );

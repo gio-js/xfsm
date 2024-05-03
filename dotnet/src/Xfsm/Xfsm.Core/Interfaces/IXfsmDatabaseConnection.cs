@@ -15,6 +15,12 @@ namespace Xfsm.Core.Interfaces
         IList<T> Query<T>(string sqlQuery);
 
         /// <summary>
+        /// Executes a sql query against the acquired sql connection and returns first element
+        /// </summary>
+        /// <param name="sqlQuery"></param>
+        T QueryFirst<T>(string sqlQuery);
+
+        /// <summary>
         /// Executes a sql statement against the acquired sql connection
         /// </summary>
         /// <param name="sqlStatement"></param>

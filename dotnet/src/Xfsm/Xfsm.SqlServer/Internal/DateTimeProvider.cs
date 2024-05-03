@@ -1,16 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Xfsm.SqlServer.Internal
 {
     /// <summary>
     /// Useful class used to 
     /// </summary>
-    internal class DateTimeProvider
+    internal static class DateTimeProvider
     {
-        public DateTimeOffset Now()
+        private static DateTimeOffset? instance;
+        public static void Set(DateTimeOffset date)
         {
+            instance = date;
+        }
+
+        public static DateTimeOffset Now()
+        {
+            if (instance.HasValue)
+                return instance.Value;
+
             return DateTimeOffset.Now;
         }
     }

@@ -70,7 +70,7 @@ namespace Xfsm.SqlServer.Test
         {
             // ARRANGE
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
-            IXfsmDatabaseConnection connection = provider.GetConnection();
+            using IXfsmDatabaseConnection connection = provider.GetConnection();
             XfsmPeekMode mode = XfsmPeekMode.Queue;
             XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
 
@@ -84,7 +84,7 @@ namespace Xfsm.SqlServer.Test
         {
             // ARRANGE
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
-            IXfsmDatabaseConnection connection = provider.GetConnection();
+            using IXfsmDatabaseConnection connection = provider.GetConnection();
             XfsmPeekMode mode = XfsmPeekMode.Queue;
             XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
 
@@ -97,7 +97,7 @@ namespace Xfsm.SqlServer.Test
         {
             // ARRANGE
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
-            IXfsmDatabaseConnection connection = provider.GetConnection();
+            using IXfsmDatabaseConnection connection = provider.GetConnection();
             XfsmPeekMode mode = XfsmPeekMode.Queue;
             XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
             DateTimeOffset offset = "2023-09-11T09:08:11.000+01:00".ToDateTimeOffset();
@@ -115,13 +115,13 @@ namespace Xfsm.SqlServer.Test
             Assert.That(dto.InsertedTimestamp, Is.EqualTo(offset));
             Assert.That(dto.UpdatedTimestamp, Is.EqualTo(offset));
             Assert.That(dto.PeekTimestamp, Is.Null);
-            Assert.That(dto.State, Is.EqualTo(SampleEnum.State1));
+            Assert.That(dto.State, Is.EqualTo((int)SampleEnum.State1));
             Assert.That(dto.PeekStatus, Is.EqualTo(XfsmPeekStatus.Todo));
-            Assert.That(dto.Error, Is.Not.Null);
+            Assert.That(dto.Error, Is.Null);
 
             Assert.That(json, Is.Not.Null);
             Assert.That(json.XfsmElementId, Is.EqualTo(id));
-            Assert.That(json.JsonData, Is.EqualTo("{ Id: 1, Code: 'Code1' }"));
+            Assert.That(json.JsonData, Is.EqualTo("{\"Id\":1,\"Code\":\"Code1\"}"));
         }
     }
 }

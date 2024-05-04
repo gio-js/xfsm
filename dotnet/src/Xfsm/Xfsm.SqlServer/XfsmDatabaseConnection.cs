@@ -97,7 +97,12 @@ namespace Xfsm.SqlServer
                     for (int i = 0; i < elementProperties.Length; i++)
                     {
                         PropertyInfo propertyInfo = elementProperties[i];
-                        propertyInfo.SetValue(element, reader.GetValue(i));
+                        object value = reader.GetValue(i);
+
+                        if (value is System.DBNull)
+                            propertyInfo.SetValue(element, null);
+                        else
+                            propertyInfo.SetValue(element, value);
                     }
                     elements.Add(element);
                 }

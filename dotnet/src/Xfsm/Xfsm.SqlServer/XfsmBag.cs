@@ -30,7 +30,7 @@ namespace Xfsm.SqlServer
             long id = connection.QueryFirst<long>(string.Format(@"
                 INSERT INTO dbo.XfsmElement (InsertedTimestamp, UpdatedTimestamp, PeekTimestamp, [State], PeekStatus, Error)
                 VALUES ('{0}', '{1}', null, {2}, {3}, null); 
-                SELECT SCOPE_IDENTITY();", now, now, Convert.ToInt16(elementState), (byte)XfsmPeekStatus.Todo));
+                SELECT SCOPE_IDENTITY();", now, now, Convert.ToInt16(elementState), (byte)XfsmPeekStatus.Todo)); //todo: transform to  sql parameters
 
             connection.Execute(string.Format(@"
                 INSERT INTO dbo.XfsmBusinessElement (XfsmElementId, JsonData)

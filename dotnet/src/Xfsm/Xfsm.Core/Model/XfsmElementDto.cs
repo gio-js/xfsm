@@ -9,7 +9,7 @@ namespace Xfsm.Core.Model
         public DateTimeOffset InsertedTimestamp { get; set; }
         public DateTimeOffset UpdatedTimestamp { get; set; }
         public DateTimeOffset? PeekTimestamp { get; set; }
-        public Enum State { get; set; }
+        public int State { get; set; }
         public XfsmPeekStatus PeekStatus { get; set; }
         public string Error { get; set; }
     }

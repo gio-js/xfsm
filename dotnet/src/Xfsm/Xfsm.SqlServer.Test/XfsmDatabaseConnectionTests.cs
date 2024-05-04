@@ -25,7 +25,7 @@ namespace Xfsm.SqlServer.Test
             string connectionString = "";
 
             // ACT
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(connectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(connectionString);
 
             // ASSERT
             Assert.That(connection, Is.Not.Null);
@@ -35,7 +35,7 @@ namespace Xfsm.SqlServer.Test
         public void Query_SimpleGetDate_ReturnsServerDate()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
             IList<DateTime> result = connection.Query<DateTime>("select convert(datetime, '2023-09-11T09:08:11.000');");
@@ -50,7 +50,7 @@ namespace Xfsm.SqlServer.Test
         public void Query_SimpleGetInt_ReturnsInt([Values(-12312, 0, 412412)] int value)
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
             IList<int> result = connection.Query<int>($"select convert(int, {value});");
@@ -65,7 +65,7 @@ namespace Xfsm.SqlServer.Test
         public void Query_SimpleGetString_ReturnsString()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
             IList<string> result = connection.Query<string>($"select 'test';");
@@ -80,7 +80,7 @@ namespace Xfsm.SqlServer.Test
         public void Query_GetSimpleDto()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
             IList<SimpleDto> result = connection.Query<SimpleDto>($"select 123 as Column1, 'test' as Column2;");
@@ -96,7 +96,7 @@ namespace Xfsm.SqlServer.Test
         public void Query_GetSimpleDtoArray()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
             IList<SimpleDto> result = connection.Query<SimpleDto>($"select 123 as Column1, 'test1' as Column2 union select 456 as Column1, 'test2' as Column2;");
@@ -115,7 +115,7 @@ namespace Xfsm.SqlServer.Test
         public void QueryFirst_GetSimpleDtoArray()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
             SimpleDto dto = connection.QueryFirst<SimpleDto>($"select 123 as Column1, 'test1' as Column2 union select 456 as Column1, 'test2' as Column2;");
@@ -130,7 +130,7 @@ namespace Xfsm.SqlServer.Test
         public void QueryFirst_EmptyArray_GetSimpleDtoArray()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
             SimpleDto dto = connection.QueryFirst<SimpleDto>($"select top 0 null as Column2;");
@@ -143,7 +143,7 @@ namespace Xfsm.SqlServer.Test
         public void Execute_RunDDL()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
             string uuid = Guid.NewGuid().ToString();
             string table = $"[tbl_{uuid}]";
 
@@ -160,7 +160,7 @@ namespace Xfsm.SqlServer.Test
         public void Execute_RunDML()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
             string uuid = Guid.NewGuid().ToString();
             string table = $"[tbl_{uuid}]";
             IList<DDLTableDto> result = null;
@@ -215,7 +215,7 @@ namespace Xfsm.SqlServer.Test
         public void Execute_Test_NoCommit_RollbackOnDispose()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
             string uuid = Guid.NewGuid().ToString();
             string table = $"tbl_{uuid}";
 
@@ -242,7 +242,7 @@ namespace Xfsm.SqlServer.Test
         public void Execute_Test_Commit_NoRollbackOnDispose()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
             string uuid = Guid.NewGuid().ToString();
             string table = $"tbl_{uuid}";
 
@@ -278,7 +278,7 @@ namespace Xfsm.SqlServer.Test
         public void Execute_Test_NoTransaction_Commit_ThrowsException()
         {
             // ARRANGE
-            IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
 
             // ACT
             Exception exception = Assert.Throws<Exception>(() => connection.Commit());

@@ -10,7 +10,7 @@ namespace Xfsm.SqlServer
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class XfsmDatabaseConnection : IXfsmDatabaseConnection
+    internal class XfsmDatabaseConnection : IXfsmDatabaseConnection
     {
         private readonly string connectionString;
         private SqlConnection connection;
@@ -19,7 +19,7 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public XfsmDatabaseConnection(string connectionString)
+        internal XfsmDatabaseConnection(string connectionString)
         {
             this.connectionString = connectionString;
         }
@@ -54,13 +54,17 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Execute(string sqlStatement)
+        public void Execute(string sqlStatement, params XfsmDatabaseParameter[] parameters)
         {
             this.InitConnectionWithTransactionIfNeeded();
 
             using SqlCommand command = connection.CreateCommand();
             command.Transaction = this.transaction;
             command.CommandText = sqlStatement;
+            foreach (XfsmDatabaseParameter param in parameters)
+            {
+                command.Parameters.Add(new SqlParameter(param.Name, param.Value));
+            }
             command.ExecuteNonQuery();
         }
 
@@ -70,7 +74,7 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IList<T> Query<T>(string sqlQuery)
+        public IList<T> Query<T>(string sqlQuery, params XfsmDatabaseParameter[] parameters)
         {
             this.InitConnectionWithTransactionIfNeeded();
 
@@ -79,6 +83,10 @@ namespace Xfsm.SqlServer
             using SqlCommand command = connection.CreateCommand();
             command.Transaction = this.transaction;
             command.CommandText = sqlQuery;
+            foreach (XfsmDatabaseParameter param in parameters)
+            {
+                command.Parameters.Add(new SqlParameter(param.Name, param.Value));
+            }
 
             using SqlDataReader reader = command.ExecuteReader();
             if (generic.IsPrimitive || exPrimitiveTypes.Contains(generic.Name))
@@ -113,9 +121,9 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public T QueryFirst<T>(string sqlQuery)
+        public T QueryFirst<T>(string sqlQuery, params XfsmDatabaseParameter[] parameters)
         {
-            IList<T> elements = this.Query<T>(sqlQuery);
+            IList<T> elements = this.Query<T>(sqlQuery, parameters);
 
             if (elements.Count > 0)
                 return elements[0];

@@ -140,6 +140,79 @@ namespace Xfsm.SqlServer.Test
         }
 
         [Test]
+        public void Query_WithParameters_GetSimpleDtoArray()
+        {
+            // ARRANGE
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+
+            // ACT
+            IList<SimpleDto> list = connection.Query<SimpleDto>($@"
+                select * from (
+                    select 1 Column1, 'Description1' Column2
+                    union select 2 Column1, 'Description2' Column2
+                    union select 3 Column1, 'Description3' Column2
+                ) a
+                where Column1 = @id", new XfsmDatabaseParameter("id", 2));
+
+            // ASSERT
+            Assert.That(list, Is.Not.Null);
+            Assert.That(list.Count, Is.EqualTo(1));
+            Assert.That(list.First().Column1, Is.EqualTo(2));
+            Assert.That(list.First().Column2, Is.EqualTo("Description2"));
+        }
+
+        [Test]
+        public void Query_WithParameters_GetTwoSimpleDtoArray()
+        {
+            // ARRANGE
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+
+            // ACT
+            IList<SimpleDto> list = connection.Query<SimpleDto>($@"
+                select * from (
+                    select 1 Column1, 'Description1' Column2
+                    union select 2 Column1, 'Description2' Column2
+                    union select 3 Column1, 'Description3' Column2
+                ) a
+                where Column1 in (@id1, @id2) ", new XfsmDatabaseParameter("id1", 3), new XfsmDatabaseParameter("id2", 2));
+
+            // ASSERT
+            Assert.That(list, Is.Not.Null);
+            Assert.That(list.Count, Is.EqualTo(2));
+
+            var dto = list.First(x => x.Column1 == 3);
+            Assert.That(dto, Is.Not.Null);
+            Assert.That(dto.Column1, Is.EqualTo(3));
+            Assert.That(dto.Column2, Is.EqualTo("Description3"));
+
+            dto = list.First(x => x.Column1 == 2);
+            Assert.That(dto, Is.Not.Null);
+            Assert.That(dto.Column1, Is.EqualTo(2));
+            Assert.That(dto.Column2, Is.EqualTo("Description2"));
+        }
+
+        [Test]
+        public void QueryFirst_WithParameters_GetSimpleDto()
+        {
+            // ARRANGE
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+
+            // ACT
+            SimpleDto dto = connection.QueryFirst<SimpleDto>($@"
+                select * from (
+                    select 1 Column1, 'Description1' Column2
+                    union select 2 Column1, 'Description2' Column2
+                    union select 3 Column1, 'Description3' Column2
+                ) a
+                where Column1 = @id", new XfsmDatabaseParameter("id", 2));
+
+            // ASSERT
+            Assert.That(dto, Is.Not.Null);
+            Assert.That(dto.Column1, Is.EqualTo(2));
+            Assert.That(dto.Column2, Is.EqualTo("Description2"));
+        }
+
+        [Test]
         public void Execute_RunDDL()
         {
             // ARRANGE
@@ -286,6 +359,26 @@ namespace Xfsm.SqlServer.Test
             // ASSERT
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.EqualTo("No transaction available."));
+        }
+
+        [Test]
+        public void Execute_Test_WithParameters()
+        {
+            // ARRANGE
+            using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(base.ConnectionString);
+            string uuid = Guid.NewGuid().ToString();
+            string table = $"tbl_{uuid}";
+
+            // ACT
+            connection.Execute($"create table [{table}] (Id int, Value nvarchar(256));");
+            connection.Execute($"insert into [{table}] (Id, Value) values (@id, @value);",
+                new XfsmDatabaseParameter("id", 1),
+                new XfsmDatabaseParameter("value", "Value2"));
+
+            int tableCount = connection.QueryFirst<int>($"select count(*) from [{table}] where Id = 1;");
+
+            // ASSERT
+            Assert.That(tableCount, Is.EqualTo(1));
         }
     }
 }

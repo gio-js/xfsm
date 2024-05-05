@@ -18,6 +18,6 @@ namespace Xfsm.Core.Abstract
         /// Creates the database connection
         /// </summary>
         /// <returns></returns>
-        public abstract IXfsmDatabaseConnection GetConnection();
+        internal abstract IXfsmDatabaseConnection GetConnection();
     }
 }

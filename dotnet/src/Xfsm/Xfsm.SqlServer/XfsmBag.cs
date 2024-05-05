@@ -27,14 +27,19 @@ namespace Xfsm.SqlServer
             string now = DateTimeProvider.Now().ToSql();
 
             using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();
-            long id = connection.QueryFirst<long>(string.Format(@"
+            long id = connection.QueryFirst<long>(@"
                 INSERT INTO dbo.XfsmElement (InsertedTimestamp, UpdatedTimestamp, PeekTimestamp, [State], PeekStatus, Error)
-                VALUES ('{0}', '{1}', null, {2}, {3}, null); 
-                SELECT SCOPE_IDENTITY();", now, now, Convert.ToInt16(elementState), (byte)XfsmPeekStatus.Todo)); //todo: transform to  sql parameters
+                VALUES (@now, @now, null, @state, @peek, null); 
+                SELECT SCOPE_IDENTITY();",
+                new XfsmDatabaseParameter("now", now),
+                new XfsmDatabaseParameter("state", Convert.ToInt16(elementState)),
+                new XfsmDatabaseParameter("peek", (byte)XfsmPeekStatus.Todo));
 
-            connection.Execute(string.Format(@"
+            connection.Execute(@"
                 INSERT INTO dbo.XfsmBusinessElement (XfsmElementId, JsonData)
-                VALUES ('{0}', '{1}');", id, JsonConvert.SerializeObject(businessElement))); //todo: transform to  sql parameters
+                VALUES (@id, @json);",
+                new XfsmDatabaseParameter("id", id),
+                new XfsmDatabaseParameter("json", JsonConvert.SerializeObject(businessElement)));
 
             connection.Commit();
 

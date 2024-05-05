@@ -16,7 +16,7 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override IXfsmDatabaseConnection GetConnection()
+        internal override IXfsmDatabaseConnection GetConnection()
         {
             return new XfsmDatabaseConnection(base.connectionString);
         }

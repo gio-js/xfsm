@@ -97,19 +97,19 @@ classDiagram
     }
 
     class XfsmProcessor ~TKey~ {
-        <<abstract>>
+        <<impl>>
         +XfsmProcessor(bag:  XfsmBag~TKey~)
         +WaitAndProcessElements(state: StateEnum, maximumElementToElaborate: int, maximumTimeOfElaboration: TimeSpan) void
     }
 
     class XfsmAppender ~TKey~ {
-        <<abstract>>
+        <<impl>>
         +XfsmAppender(bag:  XfsmBag~TKey~)
         +Add(businessElement: TKey, elementState: StateEnum) void
     }
 
     class XfsmDataRolling ~TKey~ {
-        <<abstract>>
+        <<impl>>
         +XfsmDataRolling(bag:  XfsmBag~TKey~)
         +ExecuteRolling() void
     }

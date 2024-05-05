@@ -22,13 +22,21 @@ namespace Xfsm.SqlServer.Test
         public void CanInstantiateObject()
         {
             // ARRANGE
-            string connectionString = "";
+            string connectionString = "the_connection_string";
 
             // ACT
             using IXfsmDatabaseConnection connection = new XfsmDatabaseConnection(connectionString);
 
             // ASSERT
             Assert.That(connection, Is.Not.Null);
+        }
+
+        [Test]
+        public void CanInstantiateObject_GivenEmptyOrNull_ThrowsNullArgEx()
+        {
+            // ACT
+            Assert.Throws<ArgumentNullException>(() => new XfsmDatabaseConnection(""));
+            Assert.Throws<ArgumentNullException>(() => new XfsmDatabaseConnection(null));
         }
 
         [Test]

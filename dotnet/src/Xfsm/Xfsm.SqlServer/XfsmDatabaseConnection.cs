@@ -19,9 +19,9 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        internal XfsmDatabaseConnection(string connectionString)
+        internal XfsmDatabaseConnection(string? connectionString)
         {
-            this.connectionString = connectionString;
+            this.connectionString = !string.IsNullOrEmpty(connectionString) ? connectionString : throw new ArgumentNullException(nameof(connectionString));
         }
 
         /// <summary>

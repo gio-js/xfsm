@@ -51,7 +51,13 @@ namespace Xfsm.SqlServer
         /// </summary>
         public override void EnsureInitialized()
         {
-            throw new NotImplementedException();
+            using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();
+            int tableCount = connection.QueryFirst<int>("select count(*) from sys.tables where name in ('XfsmElement', 'XfsmBusinessElement');");
+
+            if (tableCount == 2)
+                return;
+
+            throw new InvalidDataException("Database bag tables has not been properly initialized.");
         }
 
         /// <summary>

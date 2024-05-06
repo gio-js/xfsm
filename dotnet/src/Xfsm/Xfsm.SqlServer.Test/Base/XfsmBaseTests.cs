@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Xfsm.Core.Interfaces;
-using Xfsm.SqlServer.Test.Utils;
 
 namespace Xfsm.SqlServer.Test.Base
 {
@@ -22,13 +20,6 @@ namespace Xfsm.SqlServer.Test.Base
             // assert on configuration
             Assert.That(this.ConnectionString, Is.Not.Null, "Connection string is null.");
             Assert.That(this.ConnectionString, Is.Not.Empty, "Connection string is empty.");
-
-            // initialize bag tables
-            string script = "Scripts.DataModel.sql".AsResourceString();
-            XfsmDatabaseProvider provider = new XfsmDatabaseProvider(ConnectionString);
-            using IXfsmDatabaseConnection connection = provider.GetConnection();
-            connection.Execute(script);
-            connection.Commit();
         }
     }
 }

@@ -1,12 +1,12 @@
 # xfsm
 ## Library goals
-  * design of a distributed competing consumer finite state machine
-  * integration with the major relational database (sql server, oracle)
+  * distributed competing consumer finite state machine
+  * integration with the major relational database (sql server, oracle, postgres)
   * if efficient, an integration with a distributed memory cache like redis
-  * porting on at least 2 main prog. languages (c#, java)
+  * porting on at least 2 main programming languages (c#, java)
   * excellent error handling
   * states transitions will be defined by the business logic (at runtime) during the item elaboration
-  * provide a web statistics dashboard (ie: tot. number of elements, amount of elements by status, last errors, ecc...)
+  * provide rest APIs for stats (ie: tot. number of elements, amount of elements by status, last errors, ecc...)
   * provide a rest api interface which provides the same statistics as above and add some interationcs features (ie. add new elements, retrieve a specific element, etc.)
 ## Restrictions
   * Collection items must be of the same complex type

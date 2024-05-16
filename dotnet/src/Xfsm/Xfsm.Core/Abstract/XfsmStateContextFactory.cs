@@ -12,7 +12,7 @@ namespace Xfsm.Core.Abstract
         /// Executes the related business logic of current state
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        public XfsmStateContext<T> Create<T>(XfsmDatabaseProvider databaseProvider, IXfsmStateFactory stateFactory, IXfsmElement<T> element)
+        public XfsmStateContext<T> Create<T>(XfsmDatabaseProvider databaseProvider, IXfsmStateFactory stateFactory, XfsmElement<T> element)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Xfsm.Core.Enums;
 
 namespace Xfsm.Core.Interfaces
 {
@@ -8,10 +9,16 @@ namespace Xfsm.Core.Interfaces
     public interface IXfsmElement<T>
     {
         /// <summary>
+        /// The bag unique element id
+        /// </summary>
+        /// <returns></returns>
+        long GetId();
+
+        /// <summary>
         /// The element current state
         /// </summary>
         /// <returns></returns>
-        Enum GetState();
+        int GetState();
 
         /// <summary>
         /// Element inserted in the bag timestamp
@@ -29,12 +36,22 @@ namespace Xfsm.Core.Interfaces
         /// Element fetch from bag timestamp
         /// </summary>
         /// <returns></returns>
-        DateTimeOffset GetPeekTimestamp();
+        DateTimeOffset? GetPeekedTimestamp();
 
         /// <summary>
         /// The business element representation
         /// </summary>
         /// <returns></returns>
         T GetBusinessElement();
+
+        /// <summary>
+        /// Peek current status
+        /// </summary>
+        XfsmPeekStatus GetPeekStatus();
+
+        /// <summary>
+        /// Returns the processing error registered on business logic
+        /// </summary>
+        string GetError();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Xfsm.Core.Interfaces;
 using Xfsm.SqlServer.Test.Base;
-using Xfsm.SqlServer.Test.Utils;
 
 namespace Xfsm.SqlServer.Test
 {
@@ -21,7 +20,7 @@ namespace Xfsm.SqlServer.Test
         }
 
         [Test]
-        public void OpenConnection_CreatesXfsmDatabaseConnection()
+        public void GetConnection_CreatesXfsmDatabaseConnection()
         {
             // ARRANGE
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
@@ -31,6 +30,22 @@ namespace Xfsm.SqlServer.Test
 
             // ASSERT
             Assert.That(connection, Is.Not.Null);
+        }
+
+        [Test]
+        public void GetConnection_MultipleCall_ReturnsDifferentInstances()
+        {
+            // ARRANGE
+            XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
+
+            // ACT
+            IXfsmDatabaseConnection connection1 = provider.GetConnection();
+            IXfsmDatabaseConnection connection2 = provider.GetConnection();
+
+            // ASSERT
+            Assert.That(connection1, Is.EqualTo(connection1));
+            Assert.That(connection2, Is.EqualTo(connection2));
+            Assert.That(connection1, Is.Not.EqualTo(connection2));
         }
     }
 }

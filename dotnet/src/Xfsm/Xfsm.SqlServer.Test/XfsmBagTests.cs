@@ -115,7 +115,6 @@ namespace Xfsm.SqlServer.Test
         {
             // ARRANGE
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
-            using IXfsmDatabaseConnection connection = provider.GetConnection();
             XfsmPeekMode mode = XfsmPeekMode.Queue;
             XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
 
@@ -125,6 +124,55 @@ namespace Xfsm.SqlServer.Test
             //connection.Execute(script);
 
             xfsm.EnsureInitialized();
+        }
+
+        [Test]
+        public void GetPeekMode_ReturnsModePassedByCtor([Values(XfsmPeekMode.Stack, XfsmPeekMode.Queue)] XfsmPeekMode mode)
+        {
+            // ARRANGE
+            XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
+            XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
+
+            // ACT
+            XfsmPeekMode result = xfsm.GetPeekMode();
+
+            // ASSERT
+            Assert.That(result, Is.EqualTo(mode));
+        }
+
+        [Test]
+        public void Peek_QueueMode_Given3ElementsInState1_PeekOnState1_ReturnsFirstInserted()
+        {
+            // ARRANGE
+            XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
+            XfsmPeekMode mode = XfsmPeekMode.Queue;
+            XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, mode);
+            DateTimeOffset inserted = "2023-08-14T14:08:16.000+01:00".ToDateTimeOffset();
+            DateTimeOffset peeked = "2023-08-14T14:08:16.000+01:00".ToDateTimeOffset();
+            DateTimeProvider.Set(inserted);
+
+            long id1 = xfsm.AddElement(new Sample { Id = 100, Code = "100" }, SampleEnum.State1);
+            long id2 = xfsm.AddElement(new Sample { Id = 200, Code = "200" }, SampleEnum.State1);
+            long id3 = xfsm.AddElement(new Sample { Id = 300, Code = "300" }, SampleEnum.State1);
+
+            // ACT
+            DateTimeProvider.Set(peeked);
+            XfsmElement<Sample> result = xfsm.Peek(SampleEnum.State1);
+
+            // ASSERT
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.GetId(), Is.EqualTo(id1));
+            Assert.That(result.GetBusinessElement(), Is.Not.Null);
+            Assert.That(result.GetInsertedTimestamp(), Is.EqualTo(inserted));
+            Assert.That(result.GetPeekedTimestamp(), Is.EqualTo(peeked));
+            Assert.That(result.GetLastUpdateTimestamp(), Is.EqualTo(peeked));
+            Assert.That(result.GetState(), Is.EqualTo(SampleEnum.State1));
+            Assert.That(result.GetPeekStatus(), Is.EqualTo(XfsmPeekStatus.Progress));
+            Assert.That(result.GetError(), Is.Null);
+
+            Sample businessElement = result.GetBusinessElement();
+            Assert.That(businessElement.Id, Is.EqualTo(100));
+            Assert.That(businessElement.Code, Is.EqualTo("100"));
         }
     }
 }

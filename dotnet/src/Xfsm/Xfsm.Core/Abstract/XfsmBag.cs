@@ -10,7 +10,7 @@ namespace Xfsm.Core.Abstract
     public abstract class XfsmBag<T>
     {
         protected readonly XfsmDatabaseProvider databaseProvider;
-        protected readonly XfsmPeekMode fetchMode;
+        protected readonly XfsmPeekMode peekMode;
 
         /// <summary>
         /// The base xTended Finite State Machine constructor
@@ -20,7 +20,7 @@ namespace Xfsm.Core.Abstract
         public XfsmBag(XfsmDatabaseProvider databaseProvider, XfsmPeekMode fetchMode)
         {
             this.databaseProvider = databaseProvider ?? throw new ArgumentNullException(nameof(databaseProvider));
-            this.fetchMode = fetchMode;
+            this.peekMode = fetchMode;
         }
 
         /// <summary>
@@ -37,12 +37,12 @@ namespace Xfsm.Core.Abstract
         public abstract string RetrieveDDLScript();
 
         /// <summary>
-        /// Returns the state machine fetching mode (basically a queue or a stack)
+        /// Returns the state machine peeking mode (basically a queue or a stack)
         /// </summary>
         /// <returns></returns>
-        public XfsmPeekMode GetFetchMode()
+        public XfsmPeekMode GetPeekMode()
         {
-            return fetchMode;
+            return peekMode;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Xfsm.Core.Abstract
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        public abstract IXfsmElement<T> Peek(Enum state);
+        public abstract XfsmElement<T> Peek(Enum state);
 
         /// <summary>
         /// Add a new element to the bag

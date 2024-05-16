@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
+using Xfsm.Core.Model;
 using Xfsm.SqlServer.Extensions;
 using Xfsm.SqlServer.Internal;
 
@@ -63,9 +64,26 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override IXfsmElement<T> Peek(Enum state)
+        public override XfsmElement<T> Peek(Enum state)
         {
-            throw new NotImplementedException();
+            using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();
+            XfsmElementDto element = connection.QueryFirst<XfsmElementDto>(@"
+with cte as (
+select top 1 Id, InsertedTimestamp, UpdatedTimeStamp, PeekTimestamp, [State], PeekStatus, Error
+from XfsmElement with(updlock,readpast)
+where 
+	[State] = @state
+	and PeekStatus = 0 -- todo
+order by Id
+)
+update cte set PeekStatus = 1
+output inserted.*;
+", new XfsmDatabaseParameter("state", state));
+
+            XfsmBusinessElementDto businessElement = connection.QueryFirst<XfsmBusinessElementDto>(
+                "select * from XfsmBusinessElement where Id = @id;", new XfsmDatabaseParameter("id", element.Id));
+
+
         }
 
         /// <summary>

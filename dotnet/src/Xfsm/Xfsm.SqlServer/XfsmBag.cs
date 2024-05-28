@@ -64,7 +64,7 @@ namespace Xfsm.SqlServer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override XfsmElement<T> Peek(Enum state)
+        public override IXfsmElement<T> Peek(Enum state)
         {
             using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();
             XfsmElementDto element = connection.QueryFirst<XfsmElementDto>(@"
@@ -73,17 +73,39 @@ select top 1 Id, InsertedTimestamp, UpdatedTimeStamp, PeekTimestamp, [State], Pe
 from XfsmElement with(updlock,readpast)
 where 
 	[State] = @state
-	and PeekStatus = 0 -- todo
+	and PeekStatus = @todo
 order by Id
 )
-update cte set PeekStatus = 1
+update cte set 
+    PeekTimestamp = @peekts,
+    PeekStatus = @progress
 output inserted.*;
-", new XfsmDatabaseParameter("state", state));
+", new XfsmDatabaseParameter("state", state),
+new XfsmDatabaseParameter("peekts", DateTimeProvider.Now()),
+new XfsmDatabaseParameter("todo", XfsmPeekStatus.Todo),
+new XfsmDatabaseParameter("progress", XfsmPeekStatus.Progress));
+
+            if (element == null)
+                return null;
 
             XfsmBusinessElementDto businessElement = connection.QueryFirst<XfsmBusinessElementDto>(
-                "select * from XfsmBusinessElement where Id = @id;", new XfsmDatabaseParameter("id", element.Id));
+                "select * from XfsmBusinessElement where XfsmElementId = @id;", new XfsmDatabaseParameter("id", element.Id));
+            connection.Commit();
 
+            return new XfsmElement<T>(element, businessElement);
+        }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override void Clear()
+        {
+            using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();
+
+            connection.Execute(@"
+                TRUNCATE TABLE dbo.XfsmBusinessElement;
+                DELETE FROM dbo.XfsmElement;");
+            connection.Commit();
         }
 
         /// <summary>

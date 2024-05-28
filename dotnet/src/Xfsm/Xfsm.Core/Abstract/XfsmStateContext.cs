@@ -8,13 +8,13 @@ namespace Xfsm.Core.Abstract
     /// </summary>
     public abstract class XfsmStateContext<T>
     {
-        private XfsmElement<T> element;
+        private IXfsmElement<T> element;
 
         /// <summary>
         /// Creates the state context
         /// </summary>
         /// <param name="element"></param>
-        public XfsmStateContext(XfsmDatabaseProvider databaseProvider, IXfsmStateFactory stateFactory, XfsmElement<T> element)
+        public XfsmStateContext(XfsmDatabaseProvider databaseProvider, IXfsmStateFactory stateFactory, IXfsmElement<T> element)
         {
             this.element = element;
         }

@@ -50,7 +50,13 @@ namespace Xfsm.Core.Abstract
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        public abstract XfsmElement<T> Peek(Enum state);
+        public abstract IXfsmElement<T> Peek(Enum state);
+
+        /// <summary>
+        /// Deletes every element from the bag
+        /// </summary>
+        /// <returns></returns>
+        public abstract void Clear();
 
         /// <summary>
         /// Add a new element to the bag

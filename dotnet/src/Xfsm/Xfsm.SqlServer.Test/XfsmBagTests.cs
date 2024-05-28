@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Moq;
+using System.Collections.Concurrent;
 using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
 using Xfsm.Core.Model;
@@ -391,7 +392,7 @@ namespace Xfsm.SqlServer.Test
                     if (element != null)
                         elements[index].Add(element.GetId());
 
-                    Task.Delay(rnd.Next(70)+30).Wait();
+                    Task.Delay(rnd.Next(70) + 30).Wait();
 
                 } while (element != null);
             });
@@ -404,6 +405,51 @@ namespace Xfsm.SqlServer.Test
             Assert.That(groupedById.Count(), Is.EqualTo(n)); // again, dequeued all elements
             Assert.That(groupedById.Where(x => x.Count > 1).Count(), Is.EqualTo(0)); // no elements should appear more than once
             Assert.That(groupedById.Where(x => x.Count == 1).Count(), Is.EqualTo(n)); // all elements must appear only once
+        }
+
+        [Test]
+        public void Error_GivenAnExistingElement_SetOnErrorWithTheSpecifiedErrorMessage()
+        {
+            // ARRANGE
+            XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
+            using IXfsmDatabaseConnection connection = provider.GetConnection();
+            XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, XfsmPeekMode.Queue);
+            DateTimeOffset updated = "2023-08-14T14:08:16.000+01:00".ToDateTimeOffset();
+            DateTimeProvider.Set(updated);
+            string message = "Error message";
+
+            xfsm.AddElement(new Sample { Id = 1 }, SampleEnum.State1);
+            IXfsmElement<Sample> element = xfsm.Peek(SampleEnum.State1);
+
+            // ACT
+            xfsm.Error(element, message);
+
+            // ASSERT
+            int count = connection.QueryFirst<int>($"select count(*) from dbo.XfsmElement where id = @id;", new XfsmDatabaseParameter("id", element.GetId()));
+            int state = connection.QueryFirst<int>($"select PeekStatus from dbo.XfsmElement where id = @id;", new XfsmDatabaseParameter("id", element.GetId()));
+            string resultMessage = connection.QueryFirst<string>($"select Error from dbo.XfsmElement where id = @id;", new XfsmDatabaseParameter("id", element.GetId()));
+            DateTimeOffset updateTs = connection.QueryFirst<DateTimeOffset>($"select UpdatedTimeStamp from dbo.XfsmElement where id = @id;", new XfsmDatabaseParameter("id", element.GetId()));
+            Assert.That(count, Is.EqualTo(1));
+            Assert.That(state, Is.EqualTo((int)XfsmPeekStatus.Error));
+            Assert.That(resultMessage, Is.EqualTo(message));
+            Assert.That(updateTs, Is.EqualTo(updated));
+        }
+
+        [Test]
+        public void Error_GivenNonExistingElement_SetOnErrorDoesntThrowAnyException()
+        {
+            // ARRANGE
+            XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);
+            XfsmBag<Sample> xfsm = new XfsmBag<Sample>(provider, XfsmPeekMode.Queue);
+            var mock = new Mock<IXfsmElement<Sample>>();
+            mock.Setup(x => x.GetId()).Returns(-123241);
+            IXfsmElement<Sample> element = mock.Object;
+
+            // ACT
+            xfsm.Error(element, "message");
+
+            // ASSERT
+            // no assertion
         }
     }
 }

@@ -98,6 +98,33 @@ new XfsmDatabaseParameter("progress", XfsmPeekStatus.Progress));
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public override void Error(IXfsmElement<T> element, string errorMessage)
+        {
+            using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();
+            connection.Execute(@"
+update XfsmElement set 
+    UpdatedTimeStamp = @updts,
+    PeekStatus = @error,
+    Error = @errorMessage
+where Id=@id;
+", new XfsmDatabaseParameter("id", element.GetId()),
+new XfsmDatabaseParameter("updts", DateTimeProvider.Now()),
+new XfsmDatabaseParameter("error", XfsmPeekStatus.Error),
+new XfsmDatabaseParameter("errorMessage", errorMessage));
+            connection.Commit();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override void Done(IXfsmElement<T> element)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Clear()
         {
             using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();

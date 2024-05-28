@@ -68,7 +68,7 @@ namespace Xfsm.SqlServer
             command.ExecuteNonQuery();
         }
 
-        private string[] exPrimitiveTypes = new string[] { "DateTime", "String" };
+        private string[] exPrimitiveTypes = new string[] { "DateTime", "DateTimeOffset", "String" };
         private Dictionary<Type, PropertyInfo[]> typesPropertiesCache = new Dictionary<Type, PropertyInfo[]>();
 
         /// <summary>

@@ -59,6 +59,18 @@ namespace Xfsm.Core.Abstract
         public abstract void Clear();
 
         /// <summary>
+        /// Sets the element in an error state
+        /// </summary>
+        /// <returns></returns>
+        public abstract void Error(IXfsmElement<T> element, string errorMessage);
+
+        /// <summary>
+        /// Sets the element an processed in done state
+        /// </summary>
+        /// <returns></returns>
+        public abstract void Done(IXfsmElement<T> element);
+
+        /// <summary>
         /// Add a new element to the bag
         /// </summary>
         /// <param name="businessElement"></param>

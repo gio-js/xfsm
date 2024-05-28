@@ -119,7 +119,16 @@ new XfsmDatabaseParameter("errorMessage", errorMessage));
         /// </summary>
         public override void Done(IXfsmElement<T> element)
         {
-            throw new NotImplementedException();
+            using IXfsmDatabaseConnection connection = databaseProvider.GetConnection();
+            connection.Execute(@"
+update XfsmElement set 
+    UpdatedTimeStamp = @updts,
+    PeekStatus = @done
+where Id=@id;
+", new XfsmDatabaseParameter("id", element.GetId()),
+new XfsmDatabaseParameter("updts", DateTimeProvider.Now()),
+new XfsmDatabaseParameter("done", XfsmPeekStatus.Done));
+            connection.Commit();
         }
 
         /// <summary>

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xfsm.Core.Abstract;
+using Xfsm.Core.Interfaces;
 
 namespace Xfsm.Core
 {
@@ -9,11 +11,24 @@ namespace Xfsm.Core
     /// </summary>
     public class XfsmProcessor<T>
     {
-        private readonly XfsmBag<T> xfsmInstance;
+        private readonly IXfsmBag<T> xfsmBag;
+        private XfsmDatabaseProvider provider;
+        private int elaboratedElements;
+        private TimeSpan startTimespan;
+        private IXfsmState<T> state;
+        private IXfsmStateContextFactory<T> stateContextFactory;
 
-        protected XfsmProcessor(XfsmBag<T> xfsmInstance)
+        public XfsmProcessor(IXfsmBag<T> xfsmBag, IXfsmState<T> state, int maximumElementsToEleborate, TimeSpan maximumTimeOfElaboration)
+            : this(xfsmBag, new XfsmStateContextFactory<T>(xfsmBag, state), maximumElementsToEleborate, maximumTimeOfElaboration)
+        { }
+
+        public XfsmProcessor(IXfsmBag<T> xfsmBag, IXfsmState<T> state)
+            : this(xfsmBag, new XfsmStateContextFactory<T>(xfsmBag, state), 10, TimeSpan.FromMinutes(10))
+        { }
+
+        internal XfsmProcessor(IXfsmBag<T> xfsmBag, IXfsmStateContextFactory<T> stateContextFactory, int maximumElementsToEleborate, TimeSpan maximumTimeOfElaboration)
         {
-            this.xfsmInstance = xfsmInstance;
+            this.xfsmBag = xfsmBag ?? throw new ArgumentNullException(nameof(xfsmBag));
         }
 
         /// <summary>
@@ -22,10 +37,41 @@ namespace Xfsm.Core
         /// <param name="state">The state to look for</param>
         /// <param name="maximumElementsToEleborate">Exit after reaching the amount of element elaborated</param>
         /// <param name="maximumTimeOfElaboration">Exit after reaching the amount of time of elaboration</param>
-        public void WaitAndProcessElement(Enum state, int maximumElementsToEleborate, TimeSpan maximumTimeOfElaboration)
+        public void WaitAndProcessElement()
         {
-            throw new NotImplementedException();
+            do
+            {
+                var element = xfsmBag.Peek(state.StateEnum());
+
+                try
+                {
+                    if (element != null)
+                    {
+                        var context = stateContextFactory.Create(element) as XfsmStateContext<T>;
+                        context.Execute();
+                    }
+
+                    // take a break
+                    Task.Delay(IncrementalDelay()).ConfigureAwait(false).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    this.xfsmBag.Error(element, ex.ToString());
+                }
+
+
+
+            } while (KeepAlive());
         }
 
+        private bool KeepAlive()
+        {
+            return true;
+        }
+
+        private int IncrementalDelay()
+        {
+            return 100;
+        }
     }
 }

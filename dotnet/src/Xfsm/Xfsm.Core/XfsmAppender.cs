@@ -1,6 +1,7 @@
 ﻿using System;
+using Xfsm.Core.Abstract;
 
-namespace Xfsm.Core.Abstract
+namespace Xfsm.Core
 {
     /// <summary>
     /// XfsmAppender is in charge of adding new elements to the bag

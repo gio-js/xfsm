@@ -1,6 +1,7 @@
 ﻿using System;
+using Xfsm.Core.Abstract;
 
-namespace Xfsm.Core.Abstract
+namespace Xfsm.Core
 {
     /// <summary>
     /// XfsmDataRolling deletes elaborated elements by specified threshold

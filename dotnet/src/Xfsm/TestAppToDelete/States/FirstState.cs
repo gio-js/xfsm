@@ -3,7 +3,7 @@ using Xfsm.Core.Interfaces;
 
 namespace TestAppToDelete.States
 {
-    public class SecondState : IXfsmState<SampleBusinessElement>
+    public class FirstState : IXfsmState<SampleBusinessElement>
     {
         public void Execute(SampleBusinessElement businessElement, IXfsmStateContext context)
         {
@@ -12,7 +12,7 @@ namespace TestAppToDelete.States
 
         public Enum StateEnum()
         {
-            return StatesEnum.State2;
+            return StatesEnum.State1;
         }
     }
 }

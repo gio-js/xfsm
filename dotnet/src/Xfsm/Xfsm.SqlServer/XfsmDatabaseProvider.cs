@@ -5,7 +5,7 @@ namespace Xfsm.SqlServer
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class XfsmDatabaseProvider : Xfsm.Core.Abstract.XfsmDatabaseProvider
+    internal class XfsmDatabaseProvider : Xfsm.Core.Abstract.XfsmDatabaseProvider
     {
         /// <summary>
         /// <inheritdoc/>

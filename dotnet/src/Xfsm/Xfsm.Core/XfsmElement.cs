@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using Xfsm.Core.Enums;
+using Xfsm.Core.Interfaces;
 using Xfsm.Core.Model;
 
-namespace Xfsm.Core.Interfaces
+namespace Xfsm.Core
 {
     /// <summary>
     /// <inheritdoc/>
@@ -25,12 +26,12 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         public T GetBusinessElement()
         {
-            if (this.businessElement == null && !string.IsNullOrEmpty(this.businessElementDto.JsonData))
+            if (businessElement == null && !string.IsNullOrEmpty(businessElementDto.JsonData))
             {
-                this.businessElement = JsonConvert.DeserializeObject<T>(this.businessElementDto.JsonData);
+                businessElement = JsonConvert.DeserializeObject<T>(businessElementDto.JsonData);
             }
 
-            return this.businessElement;
+            return businessElement;
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         public string GetError()
         {
-            return this.element.Error;
+            return element.Error;
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         public long GetId()
         {
-            return this.element.Id;
+            return element.Id;
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         public DateTimeOffset GetInsertedTimestamp()
         {
-            return this.element.InsertedTimestamp;
+            return element.InsertedTimestamp;
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         public DateTimeOffset GetLastUpdateTimestamp()
         {
-            return this.element.UpdatedTimestamp;
+            return element.UpdatedTimestamp;
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         public DateTimeOffset? GetPeekedTimestamp()
         {
-            return this.element.PeekTimestamp;
+            return element.PeekTimestamp;
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         public XfsmPeekStatus GetPeekStatus()
         {
-            return this.element.PeekStatus;
+            return element.PeekStatus;
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace Xfsm.Core.Interfaces
         /// </summary>
         public int GetState()
         {
-            return this.element.State;
+            return element.State;
         }
     }
 }

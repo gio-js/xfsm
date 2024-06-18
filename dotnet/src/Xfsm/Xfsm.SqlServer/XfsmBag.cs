@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Xfsm.Core;
 using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
 using Xfsm.Core.Model;
@@ -13,7 +14,7 @@ namespace Xfsm.SqlServer
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class XfsmBag<T> : Core.Abstract.XfsmBag<T>
+    internal class XfsmBag<T> : Core.Abstract.XfsmBag<T>
     {
         public XfsmBag(Core.Abstract.XfsmDatabaseProvider databaseProvider, XfsmPeekMode fetchMode) : base(databaseProvider, fetchMode) { }
 
@@ -36,6 +37,7 @@ namespace Xfsm.SqlServer
                 new XfsmDatabaseParameter("state", Convert.ToInt16(elementState)),
                 new XfsmDatabaseParameter("peek", (byte)XfsmPeekStatus.Todo));
 
+            //TODO: create an abstraction for the serialization
             connection.Execute(@"
                 INSERT INTO dbo.XfsmBusinessElement (XfsmElementId, JsonData)
                 VALUES (@id, @json);",

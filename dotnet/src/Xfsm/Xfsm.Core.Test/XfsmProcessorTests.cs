@@ -42,10 +42,6 @@ namespace Xfsm.Core.Test
             Assert.Throws<ArgumentNullException>(() => new XfsmProcessor<Simple>(null, null));
         }
 
-        // scenario: no elements in the bag, the process waits for the amount of time specified
-        // scenario: 100 elements in the bag, 10 is the max elements to elaborate, the processor only process 10 times
-        // scenario: 3 elements, 1 of state1 and 2 for state2, the processor calls the execute on state 1 once, and for state 2 two 
-
         [Test]
         [Description("3 elements, the processor calls the execute on state 1 three times")]
         public void WaitAndProcessElement_Given3Elements_InState1_ProcessorCalls_3TimesExecute()

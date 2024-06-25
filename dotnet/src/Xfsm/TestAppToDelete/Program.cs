@@ -5,11 +5,11 @@ using Xfsm.SqlServer.Builders;
 
 Console.WriteLine("Hello, World!");
 
-string connectionString = "";
+string connectionString = "Data Source=localhost,5434;User=sa;Password=Pass@word;Database=master;TrustServerCertificate=true";
 XfsmPeekMode mode = XfsmPeekMode.Queue;
 
-var processorState1 = XfsmProcessorBuilder.Build(connectionString, mode, new FirstState());
-var processorState2 = XfsmProcessorBuilder.Build(connectionString, mode, new SecondState());
+var processorState1 = XfsmBuilder.BuildProcessor(connectionString, mode, new FirstState());
+var processorState2 = XfsmBuilder.BuildProcessor(connectionString, mode, new SecondState());
 
 Parallel.For(0, 2, index =>
 {

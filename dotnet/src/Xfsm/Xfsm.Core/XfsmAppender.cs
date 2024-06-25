@@ -1,5 +1,5 @@
 ﻿using System;
-using Xfsm.Core.Abstract;
+using Xfsm.Core.Interfaces;
 
 namespace Xfsm.Core
 {
@@ -8,11 +8,11 @@ namespace Xfsm.Core
     /// </summary>
     public class XfsmAppender<T>
     {
-        private readonly XfsmBag<T> xfsmInstance;
+        private readonly IXfsmBag<T> xfsmInstance;
 
-        protected XfsmAppender(XfsmBag<T> xfsmInstance)
+        public XfsmAppender(IXfsmBag<T> xfsmInstance)
         {
-            this.xfsmInstance = xfsmInstance;
+            this.xfsmInstance = xfsmInstance ?? throw new ArgumentNullException(nameof(xfsmInstance));
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Xfsm.Core
         /// <exception cref="NotImplementedException"></exception>
         public void Add(T businessElement, Enum state)
         {
-            throw new NotImplementedException();
+            this.xfsmInstance.AddElement(businessElement, state);
         }
 
     }

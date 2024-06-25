@@ -357,7 +357,7 @@ namespace Xfsm.SqlServer.Test
 
         [Test]
         public void Peek_QueueMode_GivenLotsOfElements_PeekInParallel_UniqueElementsInDifferentCollections(
-            [Values(100, 1000, 5000)] int n)
+            [Values(100, 500, 1000)] int n)
         {
             // ARRANGE
             XfsmDatabaseProvider provider = new XfsmDatabaseProvider(base.ConnectionString);

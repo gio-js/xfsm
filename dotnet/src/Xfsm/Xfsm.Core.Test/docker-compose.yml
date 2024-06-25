@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+
+  test:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    volumes:
+      - ../../Xfsm:/src
+    command: [
+        "dotnet", "test", "src/Xfsm.Core.Test/Xfsm.Core.Test.csproj"
+    ]

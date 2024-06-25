@@ -1,4 +1,6 @@
-﻿using Xfsm.Core.Enums;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using Xfsm.Core.Enums;
 using Xfsm.Core.Interfaces;
 
 namespace Xfsm.Core.Test.Builder
@@ -10,51 +12,65 @@ namespace Xfsm.Core.Test.Builder
             return new Element<T>();
         }
 
-        private T businessElement = default(T);
-        public T GetBusinessElement()
+        public Element<T> With<TOut>(Expression<Func<Element<T>, TOut>> expr, object value)
         {
-            return this.businessElement;
-        }
+            var member = expr.Body as MemberExpression;
+            var prop = member?.Member as PropertyInfo;
 
-        public Element<T> SetBusinessElement(T businessElement)
-        {
-            this.businessElement = businessElement;
+            if (prop != null)
+            {
+                prop.SetValue(this, value);
+            }
+
             return this;
         }
 
+        public T BusinessElement { get; set; }
+        public T GetBusinessElement()
+        {
+            return this.BusinessElement;
+        }
+
+        public string Error { get; set; }
         public string GetError()
         {
-            throw new NotImplementedException();
+            return Error;
         }
 
+        public long Id { get; set; }
         public long GetId()
         {
-            throw new NotImplementedException();
+            return Id;
         }
 
+        public DateTimeOffset InsertedTimestamp { get; set; }
         public DateTimeOffset GetInsertedTimestamp()
         {
-            throw new NotImplementedException();
+            return InsertedTimestamp;
         }
 
+        public DateTimeOffset LastUpdateTimestamp { get; set; }
         public DateTimeOffset GetLastUpdateTimestamp()
         {
-            throw new NotImplementedException();
+            return LastUpdateTimestamp;
         }
 
+        public DateTimeOffset? PeekedTimestamp { get; set; }
         public DateTimeOffset? GetPeekedTimestamp()
         {
-            throw new NotImplementedException();
+            return PeekedTimestamp;
         }
 
+        public XfsmPeekStatus PeekStatus { get; set; }
         public XfsmPeekStatus GetPeekStatus()
         {
-            throw new NotImplementedException();
+            return PeekStatus;
         }
 
+        public int State { get; set; }
         public int GetState()
         {
-            throw new NotImplementedException();
+            return State;
         }
     }
 }

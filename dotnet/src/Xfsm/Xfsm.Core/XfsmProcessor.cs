@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Xfsm.Core.Abstract;
 using Xfsm.Core.Interfaces;
 
 namespace Xfsm.Core
@@ -12,23 +11,26 @@ namespace Xfsm.Core
     public class XfsmProcessor<T>
     {
         private readonly IXfsmBag<T> xfsmBag;
-        private XfsmDatabaseProvider provider;
-        private int elaboratedElements;
-        private TimeSpan startTimespan;
+        private int maximumElementsToEleborate;
+        private TimeSpan maximumTimeOfElaboration;
         private IXfsmState<T> state;
         private IXfsmStateContextFactory<T> stateContextFactory;
 
         public XfsmProcessor(IXfsmBag<T> xfsmBag, IXfsmState<T> state, int maximumElementsToEleborate, TimeSpan maximumTimeOfElaboration)
-            : this(xfsmBag, new XfsmStateContextFactory<T>(xfsmBag, state), maximumElementsToEleborate, maximumTimeOfElaboration)
+            : this(xfsmBag, state, new XfsmStateContextFactory<T>(xfsmBag, state), maximumElementsToEleborate, maximumTimeOfElaboration)
         { }
 
         public XfsmProcessor(IXfsmBag<T> xfsmBag, IXfsmState<T> state)
-            : this(xfsmBag, new XfsmStateContextFactory<T>(xfsmBag, state), 10, TimeSpan.FromMinutes(10))
+            : this(xfsmBag, state, new XfsmStateContextFactory<T>(xfsmBag, state), 10, TimeSpan.FromMinutes(10))
         { }
 
-        internal XfsmProcessor(IXfsmBag<T> xfsmBag, IXfsmStateContextFactory<T> stateContextFactory, int maximumElementsToEleborate, TimeSpan maximumTimeOfElaboration)
+        internal XfsmProcessor(IXfsmBag<T> xfsmBag, IXfsmState<T> state, IXfsmStateContextFactory<T> stateContextFactory, int maximumElementsToEleborate, TimeSpan maximumTimeOfElaboration)
         {
             this.xfsmBag = xfsmBag ?? throw new ArgumentNullException(nameof(xfsmBag));
+            this.state = state ?? throw new ArgumentNullException(nameof(state));
+            this.stateContextFactory = stateContextFactory ?? throw new ArgumentNullException(nameof(stateContextFactory));
+            this.maximumElementsToEleborate = maximumElementsToEleborate;
+            this.maximumTimeOfElaboration = maximumTimeOfElaboration;
         }
 
         /// <summary>
@@ -39,38 +41,44 @@ namespace Xfsm.Core
         /// <param name="maximumTimeOfElaboration">Exit after reaching the amount of time of elaboration</param>
         public void WaitAndProcessElement()
         {
+            DateTime startingTime = DateTime.Now;
+            int processedElements = 0;
+
             do
             {
                 var element = xfsmBag.Peek(state.StateEnum());
 
-                try
+                // process element
+                if (element != null)
                 {
-                    if (element != null)
+                    try
                     {
-                        var context = stateContextFactory.Create(element) as XfsmStateContext<T>;
-                        context.Execute();
+                        (stateContextFactory.Create(element) as XfsmStateContext<T>).Execute(); // execute the "state" against the element
+                    }
+                    catch (Exception ex)
+                    {
+                        this.xfsmBag.Error(element, ex.ToString());
                     }
 
-                    // take a break
-                    Task.Delay(IncrementalDelay()).ConfigureAwait(false).GetAwaiter().GetResult();
-                }
-                catch (Exception ex)
-                {
-                    this.xfsmBag.Error(element, ex.ToString());
+                    processedElements++; // increase processed count regardless it has been successfully processed or not
                 }
 
+                // take a break
+                Task.Delay(LittleDelay()).ConfigureAwait(false).GetAwaiter().GetResult();
 
-
-            } while (KeepAlive());
+            } while (KeepAlive(processedElements, startingTime));
         }
 
-        private bool KeepAlive()
+        private bool KeepAlive(int processedElements, DateTime startingTime)
         {
-            return true;
+            return
+                (processedElements < this.maximumElementsToEleborate) && // not enough elements processed
+                (DateTime.Now.Subtract(startingTime) < maximumTimeOfElaboration); // not enough time elapsed from start
         }
 
-        private int IncrementalDelay()
+        private int LittleDelay()
         {
+            // TODO: should this become incremental? and maybe decreased after a while
             return 100;
         }
     }

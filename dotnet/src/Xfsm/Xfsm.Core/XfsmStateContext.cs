@@ -18,8 +18,9 @@ namespace Xfsm.Core
         /// <param name="element"></param>
         public XfsmStateContext(IXfsmBag<T> xfsmInstance, IXfsmState<T> state, IXfsmElement<T> element)
         {
-            this.xfsmInstance = xfsmInstance;
-            this.element = element;
+            this.xfsmInstance = xfsmInstance ?? throw new ArgumentNullException(nameof(xfsmInstance));
+            this.state = state ?? throw new ArgumentNullException(nameof(state));
+            this.element = element ?? throw new ArgumentNullException(nameof(element));
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace Xfsm.Core
         /// <exception cref="NotImplementedException"></exception>
         public void ChangeState(Enum state)
         {
-            // TODO: should be transactional
+            // TODO: must be transactional
             xfsmInstance.Done(element);
             xfsmInstance.AddElement(element.GetBusinessElement(), state);
         }

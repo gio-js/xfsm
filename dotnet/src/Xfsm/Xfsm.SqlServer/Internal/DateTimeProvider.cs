@@ -3,7 +3,7 @@
 namespace Xfsm.SqlServer.Internal
 {
     /// <summary>
-    /// Useful class used to 
+    /// Useful class used to "setup" date/time for testing purpose
     /// </summary>
     internal static class DateTimeProvider
     {

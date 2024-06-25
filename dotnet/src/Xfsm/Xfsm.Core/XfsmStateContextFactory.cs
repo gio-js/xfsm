@@ -11,7 +11,11 @@ namespace Xfsm.Core
         private IXfsmBag<T> xfsmBag;
         private IXfsmState<T> state;
 
-        public XfsmStateContextFactory(IXfsmBag<T> xfsmBag, IXfsmState<T> state) { }
+        public XfsmStateContextFactory(IXfsmBag<T> xfsmBag, IXfsmState<T> state)
+        {
+            this.xfsmBag = xfsmBag ?? throw new ArgumentNullException(nameof(xfsmBag));
+            this.state = state ?? throw new ArgumentNullException(nameof(state));
+        }
 
         /// <summary>
         /// Executes the related business logic of current state

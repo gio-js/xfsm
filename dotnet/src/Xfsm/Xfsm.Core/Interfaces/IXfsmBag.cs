@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Xfsm.Core.Abstract;
 using Xfsm.Core.Enums;
 
@@ -35,29 +36,28 @@ namespace Xfsm.Core.Interfaces
         /// <returns></returns>
         IXfsmElement<T> Peek(Enum state);
 
-        /// <summary>
         /// Deletes every element from the bag
         /// </summary>
         /// <returns></returns>
-        public abstract void Clear();
+        void Clear();
 
         /// <summary>
         /// Sets the element in an error state
         /// </summary>
         /// <returns></returns>
-        public abstract void Error(IXfsmElement<T> element, string errorMessage);
+        void Error(IXfsmElement<T> element, string errorMessage);
 
         /// <summary>
         /// Sets the element an processed in done state
         /// </summary>
         /// <returns></returns>
-        public abstract void Done(IXfsmElement<T> element);
+        void Done(IXfsmElement<T> element);
 
         /// <summary>
         /// Add a new element to the bag
         /// </summary>
         /// <param name="businessElement"></param>
         /// <param name="elementState"></param>
-        public abstract long AddElement(T businessElement, Enum elementState);
+        long AddElement(T businessElement, Enum elementState);
     }
 }

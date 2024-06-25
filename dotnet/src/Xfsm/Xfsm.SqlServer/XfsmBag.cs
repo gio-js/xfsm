@@ -37,7 +37,7 @@ namespace Xfsm.SqlServer
                 new XfsmDatabaseParameter("state", Convert.ToInt16(elementState)),
                 new XfsmDatabaseParameter("peek", (byte)XfsmPeekStatus.Todo));
 
-            //TODO: create an abstraction for the serialization
+            //TODO: create an abstraction for the serialization, this also should not be json by default!
             connection.Execute(@"
                 INSERT INTO dbo.XfsmBusinessElement (XfsmElementId, JsonData)
                 VALUES (@id, @json);",

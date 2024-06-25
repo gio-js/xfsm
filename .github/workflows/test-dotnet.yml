@@ -4,8 +4,23 @@ on:
   push: { branches: main }
 
 jobs:
-  test:
-    name: Run test suite
+  test-core:
+    name: Run test suite (core)
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_FILE: ./dotnet/src/Xfsm/Xfsm.Core.Test/docker-compose.yml
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Build docker images
+      run: docker-compose build
+
+    - name: Run tests
+      run: docker-compose run test
+      
+  test-sqlserver:
+    name: Run test suite (sql server)
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: ./dotnet/src/Xfsm/Xfsm.SqlServer.Test/docker-compose.yml

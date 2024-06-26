@@ -1,0 +1,51 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: eXtended Finite State Machine APIs
+  description: These APIs allows to interact with an existing XFSM bag and retrieve statistics
+servers:
+  - url: 'http://todo.url'
+    description: Sample
+paths:
+  /stats:
+    get:
+      tags:
+        - 'statistics, all'
+      summary: Retrieves statistics for the current bag (total, tot. errors, ...)
+      responses:
+        '200':
+          description: The users just created.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/statistic'
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    statistic:
+      type: object
+      properties:
+        total:
+          description: "Overall total amount of elements"
+          type: integer
+          format: int32
+          example: 423
+        errors:
+          description: "Total amount of elements currently in an error status"
+          type: integer
+          format: int32
+          example: 21
+        grouped:
+          type: object
+          properties:
+            total:
+              description: "Overall total amount of elements"
+              type: integer
+              format: int32
+              example: 423
+      

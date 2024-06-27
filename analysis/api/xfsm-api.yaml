@@ -10,7 +10,7 @@ paths:
   /stats:
     get:
       tags:
-        - 'statistics, all'
+        - 'statistics'
       summary: Retrieves statistics for the current bag (total, tot. errors, ...)
       responses:
         '200':
@@ -24,7 +24,7 @@ paths:
   /errors:
     get:
       tags:
-        - 'errors, all'
+        - 'errors'
       summary: Retrieves all the elements still in error
       parameters: 
         - name: "top"
@@ -54,6 +54,128 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/statistic'
+  /next:
+    get:
+      tags:
+        - 'process'
+      summary: Retrieves next element to be processed
+      parameters: 
+        - name: "mode"
+          in: "query"
+          required: true
+          allowEmptyValue: false
+          description: "The peek mode (queue, stack)"
+          schema:
+            type: string
+            enum: [queue, stack]
+      responses:
+        '200':
+          description: The bag retrieve the next element to be processed, if any.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/bag-element'
+        '204':
+          description: No new element to be processed.
+  /{id}/done:
+    put:
+      tags:
+        - 'process'
+      summary: Set the specific element as processed
+      parameters: 
+        - name: "id"
+          in: "path"
+          required: true
+          allowEmptyValue: false
+          description: "The bag element id"
+          schema:
+            type: number
+            format: int64
+      responses:
+        '201':
+          description: The element has been set as processed.
+        '404':
+          description: The specified id does not exists.
+  /{id}/change-status/{state}:
+    put:
+      tags:
+        - 'process'
+      summary: Change state on the specified bag element
+      parameters: 
+        - name: "id"
+          in: "path"
+          required: true
+          allowEmptyValue: false
+          description: "The bag element id"
+          schema:
+            type: number
+            format: int64
+        - name: "state"
+          in: "path"
+          required: true
+          allowEmptyValue: false
+          description: "The new state to set on the bag element id"
+          schema:
+            type: number
+            format: int32
+      responses:
+        '200':
+          description: "Returns the new element id"
+          content:
+            application/json:
+              schema:
+                type: number
+                format: int32
+        '404':
+          description: The specified id does not exists.
+  /{id}/error:
+    put:
+      tags:
+        - 'process'
+      summary: Set the specific element as processed
+      requestBody:
+        required: true
+        description: "The error message"
+        content:
+          text/plain:
+            schema:
+              type: string
+      parameters: 
+        - name: "id"
+          in: "path"
+          required: true
+          allowEmptyValue: false
+          description: "The bag element id"
+          schema:
+            type: number
+            format: int64
+      responses:
+        '201':
+          description: The element has been set as processed.
+        '404':
+          description: The specified id does not exists.
+  /add:
+    post:
+      tags:
+        - 'process'
+      summary: Add a new element to the bag
+      requestBody:
+        required: true
+        description: "The business element to add into the bag"
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/bag-element'
+      responses:
+        '200':
+          description: "Returns the new element id"
+          content:
+            application/json:
+              schema:
+                type: number
+                format: int32
 components:
   schemas:
     statistic:
@@ -81,3 +203,13 @@ components:
                 description: "The count of elements having that specified state"
                 type: integer
                 format: int32
+    bag-element:
+      type: object
+      properties:
+        id:
+          description: "Bag id"
+          type: integer
+          format: int64
+        element:
+          description: "The business element"
+          type: object

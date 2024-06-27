@@ -11,7 +11,7 @@ Here a basic picture of the linear and simple process:
 
 ![alt text](https://github.com/gio-js/xfsm/blob/main/samples/iot/Xfsm-IOTSample.drawio.png?raw=true)
 
-```
+```csharp
   // define enum status
   public enum StatusEnum
   {
@@ -47,13 +47,13 @@ Here a basic picture of the linear and simple process:
   }
 
   // on the sensor side, create an appender and use it to push data
-  XfsmAppender<Measure> appender = XfsmBuilder.BuildAppender<Measure>(connectionString, mode);
+  XfsmAppender<Measure> appender = XfsmBuilder.BuildAppender<Measure>(connectionString, XfsmPeekMode.Queue);
   appender.Add(new Measure { ... }, StatesEnum.Analyze);
 
   // on the server side, create at least one processor for every status
-  XfsmProcessor<Measure> processorAnalyze = XfsmBuilder.BuildProcessor(connectionString, mode, new AnalyzeStatus());
-  XfsmProcessor<Measure> processorStore = XfsmBuilder.BuildProcessor(connectionString, mode, new StoreStatus());
-  XfsmProcessor<Measure> processorStats = XfsmBuilder.BuildProcessor(connectionString, mode, new StatsStatus());
+  XfsmProcessor<Measure> processorAnalyze = XfsmBuilder.BuildProcessor(connectionString, XfsmPeekMode.Queue, new AnalyzeStatus());
+  XfsmProcessor<Measure> processorStore = XfsmBuilder.BuildProcessor(connectionString, XfsmPeekMode.Queue, new StoreStatus());
+  XfsmProcessor<Measure> processorStats = XfsmBuilder.BuildProcessor(connectionString, XfsmPeekMode.Queue, new StatsStatus());
 
   // run on the server side the processor in different threads
   Parallel.For(0, 3, index =>

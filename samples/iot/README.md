@@ -9,3 +9,4 @@ In this case we want at least three statuses:
 
 Here a basic picture of the linear and simple process:
 
+![alt text](https://github.com/gio-js/xfsm/blob/main/Xfsm - IOT Sample.drawio.png?raw=true)

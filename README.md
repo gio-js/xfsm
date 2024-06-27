@@ -10,9 +10,9 @@
   * provide a rest api interface which provides the same statistics as above and add some interationcs features (ie. add new elements, retrieve a specific element, etc.)
 ## Restrictions
   * Collection items must be of the same complex type
-## What the developer needs to do for using this lib
-  * states definitions: has to implements the required IState concrete business logic
-  * states transitions: into the business logic, when required, has to use the lib api in order to move the item in the next status
+## What the developer needs to do in order to adopt this lib
+  * states definitions: has to implements the required IXfsmState concrete business logic
+  * states transitions: into the business logic, when required, has to use the lib api in order to move the item in the next state
 ## Library "must have"
   * fsm: generic finite state machine library processor features; will "move" the item state from A to B (with proper error handling)
   * consistency and durability: every state transtions will be stored in a relational database

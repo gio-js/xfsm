@@ -10,7 +10,7 @@
   * provide a rest api interface which provides the same statistics as above and add some interationcs features (ie. add new elements, retrieve a specific element, etc.)
 ## Restrictions
   * Collection items must be of the same complex type
-## What's up to the developer who's using this lib
+## What the developer needs to do for using this lib
   * states definitions: has to implements the required IState concrete business logic
   * states transitions: into the business logic, when required, has to use the lib api in order to move the item in the next status
 ## Library "must have"

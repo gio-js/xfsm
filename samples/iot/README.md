@@ -9,7 +9,9 @@ In this case we want at least three statuses:
 
 Here a basic picture of the linear and simple process:
 
+
 ![alt text](https://github.com/gio-js/xfsm/blob/main/samples/iot/Xfsm-IOTSample.drawio.png?raw=true)
+
 
 ```csharp
   // define enum status
@@ -62,7 +64,7 @@ Here a basic picture of the linear and simple process:
       {
           case 0: processorAnalyze.WaitAndProcessElement(); break;
           case 1: processorStore.WaitAndProcessElement(); break;
-          case 1: processorStats.WaitAndProcessElement(); break;
+          case 2: processorStats.WaitAndProcessElement(); break;
       }
   });
 

@@ -1,7 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
+		<PackageId>Xfsm.Core</PackageId>
+		<Version>0.0.1-beta</Version>
+		<Description>eXtended Finite State Machine - Core</Description>
+		<Authors>Giovanni Sorgente</Authors>
+		<PackageProjectUrl>https://github.com/gio-js/xfsm</PackageProjectUrl>
+		<PackageTags>xfsm</PackageTags>
+		<!--GeneratePackageOnBuild>true</GeneratePackageOnBuild-->
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -17,6 +24,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 </Project>

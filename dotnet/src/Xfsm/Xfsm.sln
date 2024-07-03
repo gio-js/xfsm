@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.SqlServer.Test", "Xfsm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAppToDelete", "TestAppToDelete\TestAppToDelete.csproj", "{10F8C688-7640-4B29-951E-F37A0C7F526B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xfsm.Core.Test", "Xfsm.Core.Test\Xfsm.Core.Test.csproj", "{CA029CE9-85CD-4503-9CF3-935B45A4F67F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.Core.Test", "Xfsm.Core.Test\Xfsm.Core.Test.csproj", "{CA029CE9-85CD-4503-9CF3-935B45A4F67F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "publish", "publish", "{2E8B17C6-BB73-4650-A5F0-C194A80C5CD4}"
+	ProjectSection(SolutionItems) = preProject
+		notes.txt = notes.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

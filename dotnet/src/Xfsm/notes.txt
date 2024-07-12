@@ -1,2 +1,7 @@
 dotnet pack -c release
 dotnet nuget push Xfsm.Core.0.0.1-beta.nupkg -k (key)) -s https://api.nuget.org/v3/index.json
+
+
+-- coverage
+dotnet test --collect:"XPlat Code Coverage"
+reportgenerator -reports:".\Xfsm.Core.Test\TestResults\e314025f-9e91-43d6-9071-fe20273e2826\coverage.cobertura.xml" -targetdir:"coverageresults" -reporttypes:Html

@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xfsm.Core\Xfsm.Core.csproj" />
     <ProjectReference Include="..\Xfsm.SqlServer\Xfsm.SqlServer.csproj" />
   </ItemGroup>
 

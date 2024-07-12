@@ -11,9 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.SqlServer.Test", "Xfsm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xfsm.Core.Test", "Xfsm.Core.Test\Xfsm.Core.Test.csproj", "{CA029CE9-85CD-4503-9CF3-935B45A4F67F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "publish", "publish", "{2E8B17C6-BB73-4650-A5F0-C194A80C5CD4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "commands", "commands", "{8B2E1D7A-2C7F-421E-84E9-36276C473C9E}"
 	ProjectSection(SolutionItems) = preProject
-		notes.txt = notes.txt
+		commands\coverage.ps = commands\coverage.ps
+		commands\notes.txt = commands\notes.txt
 	EndProjectSection
 EndProject
 Global
